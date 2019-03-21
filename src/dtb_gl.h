@@ -10,6 +10,9 @@
 *  the program to work. I couldn't find a work around to just use a single header file, this was the
 *  comprimise.
 *
+*  IMPORTANT:
+*  dtb_gl.h and dtb_gl.c are bundled together compile dtb_gl.c with your project while including dtb_gl.h!!!
+*
 *  EXAMPLE:
 *  
   *  #include "dtb_gl.h"

@@ -1,7 +1,5 @@
 #include "dtb_gl.h"
 
-#include <assert.h>
-
 void *(*sui_gl_GetProcAddress)(const char* proc) = NULL;
 
 char* dtbgl_check_gl_error()
