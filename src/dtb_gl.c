@@ -4,6 +4,16 @@
 
 void *(*sui_gl_GetProcAddress)(const char* proc) = NULL;
 
+char* dtbgl_check_gl_error()
+{
+    GLenum err;
+    while( !(err = glGetError()) ){
+        return (char*)err;
+    }  
+	
+	return NULL;
+}
+
 #ifdef _WIN32
 void *dtbgl_win32_grab_gl_address(const char *name)
 {
@@ -331,29 +341,112 @@ bool dtbgl_shader_init()
 	return true;
 }
 
-// TODO(DILLON): Write this
-void dtbgl_bind_buffer()
+uint dtbgl_create_buffer(size_t size, const void* data, GLenum target, GLenum usage_hint)
 {
+	uint buffer;
+	glGenBuffers(1, &buffer);
+	glBindBuffer(target, buffer);
+	glBufferData(target, size, data, usage_hint);
 	
+	return buffer;
 }
 
-// TODO(DILLON): Write this
-bool dtbgl_create_shaders()
+uint dtbgl_create_ibo(size_t size, const void* data, GLenum usage_hint)
 {
-	return true;
+	return dtbgl_create_buffer(size, data, GL_ELEMENT_ARRAY_BUFFER, usage_hint);
+}
+
+uint dtbgl_create_vbo(size_t size, const void* data, GLenum usage_hint)
+{
+	return dtbgl_create_buffer(size, data, GL_ARRAY_BUFFER, usage_hint);
+}
+
+void dtbgl_draw_primitive_rect(float x, float y, float width, float height, float r, float g, float b, float a)
+{
+	glBegin(GL_QUADS);
+	{
+		glColor4f(r, g, b, a);
+		glVertex2f(x, y);
+		glVertex2f(x, y + height);
+		glVertex2f(x + width, y + height);
+		glVertex2f(x + width, y);
+	}
+	glEnd();
+}
+
+uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shader)
+{
+	char info_log[512];
+	int success;
+	int code_lengths[] = {-1, -1, -1, -1, -1, -1};
+	
+	char* vert_code[] = 
+	{
+		header_code,
+		vert_shader,
+	};
+	
+	GLuint vert_shader_id = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vert_shader_id,
+				   sizeof(vert_code) / sizeof(vert_code[0]),
+				   vert_code,
+				   code_lengths);
+	
+	glCompileShader(vert_shader_id);
+	glGetShaderiv(vert_shader_id, GL_COMPILE_STATUS, &success);
+	if(!success)
+	{
+		glGetShaderInfoLog(vert_shader_id, 512, 0, info_log);
+		printf("%s\n", info_log);
+	}
+	
+	
+	char* frag_code[] =
+	{
+		header_code,
+		frag_shader,
+	};
+	
+	GLuint frag_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(frag_shader_id,
+				   sizeof(frag_code) / sizeof(frag_code[0]),
+				   frag_code,
+				   code_lengths);
+	
+	
+	glCompileShader(frag_shader_id);
+	glGetShaderiv(frag_shader_id, GL_COMPILE_STATUS, &success);
+	if(!success)
+	{
+		glGetShaderInfoLog(frag_shader_id, 512, 0, info_log);
+		printf("%s\n", info_log);
+	}
+	
+	
+	uint program_id = glCreateProgram();
+	glAttachShader(program_id, vert_shader_id);
+	glAttachShader(program_id, frag_shader_id);
+	
+	glLinkProgram(program_id);
+	
+	glGetProgramiv(program_id, GL_LINK_STATUS, &success);
+	if(!success)
+	{
+		glGetProgramInfoLog(program_id, 512, NULL, info_log);
+		printf("%s\n", info_log);
+	}
+	
+	return program_id;
 }
 
 bool dtbgl_init(void*(*glGetProcAddr)(const char* proc))
 {
-	int (APIENTRY *SwapInterval)(int interval) = NULL;
-	float fov = 9.0f / 16.0f;
-	
 	dtbgl_extension_init(glGetProcAddr);
 	
-	SwapInterval = dtbgl_extension_get_addr("wglSwapIntervalEXT");
-	if (SwapInterval == NULL) 
+	glGetStringi = dtbgl_extension_get_addr("glGetStringi");
+	if(glGetStringi == NULL)
 	{
-		SwapInterval = dtbgl_extension_get_addr("glXSwapIntervalEXT");
+		return false;
 	}
 	
 	if(dtbgl_buffer_init() == false)

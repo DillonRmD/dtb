@@ -50,6 +50,7 @@ typedef char bool;
 #endif
 
 #include <stddef.h>
+#include <stdio.h>
 
 #include <gl/gl.h>
 #include <gl/glu.h>
@@ -169,12 +170,12 @@ typedef unsigned char uchar;
 extern "C" {
 #endif
 	
+	DTB_EXTERN char* dtbgl_check_gl_error();
+	
 #ifdef _WIN32
 	// NOTE(DILLON): This is only Win32
 	DTB_EXTERN void *dtbgl_win32_grab_gl_address(const char *name);
 #endif
-	
-	// TODO(DILLON): Implement more opengl grabber address for different OS's
 	
 	// NOTE(DILLON): Initializes extensions
 	DTB_EXTERN void dtbgl_extension_init(void*(*glGetProcAddr)(const char* proc));
@@ -189,16 +190,18 @@ extern "C" {
 	DTB_EXTERN bool dtbgl_init(void*(*glGetProcAddr)(const char* proc));
 	
 	// NOTE(DILLON): Utility functions, not necessart for the wrapper to function
-	DTB_EXTERN bool dtbgl_create_shaders();
-	DTB_EXTERN void dtbgl_bind_buffer(); // TODO(DILLON): Write this
+	DTB_EXTERN uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shader);
+	DTB_EXTERN uint dtbgl_create_buffer(size_t size, const void* data, GLenum target, GLenum usage_hint);
+	
+	DTB_EXTERN uint dtbgl_create_ibo(size_t size, const void* data, GLenum usage_hint);
+	DTB_EXTERN uint dtbgl_create_vbo(size_t size, const void* data, GLenum usage_hint);
+	
+	DTB_EXTERN void dtbgl_draw_primitive_rect(float x, float y, float width, float height, float r, float g, float b, float a);
 	
 	// NOTE(DILLON): GL Calls
-	
-	// TODO(DILLON): Implement this
 	GLubyte *(APIENTRY *glGetStringi)(GLenum name, GLuint index);
-	// TODO(DILLON): Implemetn this
 	
-	
+	// NOTE(DILLON): Buffers
 	void (APIENTRY *glBindVertexArray)(GLuint array);
 	void (APIENTRY *glGenVertexArrays)(GLsizei n, GLuint * arrays);
 	void (APIENTRY *glBindBuffer)(GLenum target, GLuint buffer);
@@ -209,6 +212,7 @@ extern "C" {
 	void (APIENTRY *glVertexAttribPointer)(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer);
 	void (APIENTRY *glBufferSubData)(GLenum target, size_t offset, size_t size, const void *data);
 	
+	// NOTE(DILLON): Shaders
 	GLuint(APIENTRY *glCreateShader)(GLenum shaderType);
 	void (APIENTRY *glShaderSource)(GLuint shader, GLsizei count, const GLchar **string, const GLint *length);
 	void (APIENTRY *glCompileShader)(GLenum shaderType);
@@ -224,6 +228,7 @@ extern "C" {
 	void (APIENTRY *glGetProgramInfoLog)(GLuint program, GLsizei max_length, GLsizei *length, GLchar *info_log);
 	void (APIENTRY *glUseProgram)(GLuint program);
 	
+	// NOTE(DILLON): Uniforms
 	GLint (APIENTRY *glGetUniformLocation)(GLuint program, GLchar *name);
 	
 	void (APIENTRY *glUniform1f)(GLint location, GLfloat v0);

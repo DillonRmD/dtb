@@ -1,8 +1,8 @@
 TODO:
 * Write a function to create shaders
 * Write a function bind buffers
-* Implement a win32 way to grab OpenGL Address easily
-
+* Write a function for texture binding
+* Easy draw functions i.e. DrawRectangle, DrawCube
 
 
 DOING:
@@ -10,3 +10,4 @@ DOING:
 
 
 DONE:
+* Implement a win32 way to grab OpenGL Address easily

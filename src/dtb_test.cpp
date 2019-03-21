@@ -44,6 +44,19 @@ int main(int argc, char* argv[])
 	
 	assert(check);
 	
+	uint program_id = dtbgl_create_shaders("#version 330 core\n",
+										   
+										   "layout(location = 0) in vec2 position;\n"
+										   "void main(){\n"
+										   "gl_Position.xy = position;\n"
+										   "gl_Position.z = 1.0;\n gl_Position.w = 1.0;\n"
+										   "}\n",
+										   
+										   "out vec3 color;\n"
+										   "void main(){\n"
+										   "color = vec3(1, 0, 1);\n"
+										   "}");
+	
 	
 	
 	
@@ -55,14 +68,15 @@ int main(int argc, char* argv[])
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
 	
-	
 	running = true;
 	while(running == true)
 	{
 		poll_events();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glUseProgram(program_id);
+		dtbgl_draw_primitive_rect(-0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		
 		SDL_GL_SwapWindow(window);
 	}
