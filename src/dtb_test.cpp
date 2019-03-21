@@ -1,24 +1,12 @@
 #include "SDL/SDL.h"
 #include "dtb_gl.h"
 
-#include <windows.h>
 #include <assert.h>
 
 bool running;
 
-void *GetAnyGLFuncAddress(const char *name)
-{
-	void *p = (void *)wglGetProcAddress(name);
-	if(p == 0 ||
-	   (p == (void*)0x1) || (p == (void*)0x2) || (p == (void*)0x3) ||
-	   (p == (void*)-1) )
-	{
-		HMODULE module = LoadLibraryA("opengl32.dll");
-		p = (void *)GetProcAddress(module, name);
-	}
-	
-	return p;
-}
+#include <windows.h>
+
 
 void poll_events()
 {
@@ -33,6 +21,13 @@ void poll_events()
 }
 
 
+float vertices[] = 
+{
+	-0.5f, -0.5f,
+	0.5f, 0.5f,
+	0.0f, 0.5f,
+};
+
 int main(int argc, char* argv[])
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -45,9 +40,21 @@ int main(int argc, char* argv[])
 	
 	SDL_GL_MakeCurrent(window, context);
 	
-	int check = dtbgl_init(GetAnyGLFuncAddress);
+	int check = dtbgl_init(dtbgl_win32_grab_gl_address);
 	
 	assert(check);
+	
+	
+	
+	
+	GLuint buffer;
+	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+	
 	
 	running = true;
 	while(running == true)
@@ -55,9 +62,7 @@ int main(int argc, char* argv[])
 		poll_events();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		//SimpleLight(1, 250, , -0.5f, -1.0f);
-		
-		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		
 		SDL_GL_SwapWindow(window);
 	}

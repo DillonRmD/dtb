@@ -1,7 +1,36 @@
+/*  ============================================================================================
+*  PROJECT:  Dillon's Tool Box OpenGL Wrapper Edition
+*  AUTHOR:   Dillon Williams
+*  LICENSE:  Do What The Fuck Ever license
+*  LANGUAGE: C\C++
+*
+*  INFORMATION:
+*  To implement into your code base include dtb_gl.h into main compilation unit i.e. main.c / main.cpp
+*  Make sure to compile the compilation unit attached with dtb_gl.h (dtb_gl.c). This is neccessary for
+*  the program to work. I couldn't find a work around to just use a single header file, this was the
+*  comprimise.
+*
+*  EXAMPLE:
+*  
+  *  #include "dtb_gl.h"
+  *  int main(int argc, char* argv[])
+  *  {
+  *      //Window Creation
+  *      //OpenGL Context grabbing
+  *      bool error = dtbgl_init(dtbgl_win32_grab_gl_address);
+  *      if(error == false)
+  *          //ERROR
+  *      return 0;
+  *  }
+*
+*  ============================================================================================
+*/
+
 #ifndef DTB_GL_H
 
 #ifdef _WIN32
 // NOTE(DILLON): Disables macro redefinition warning
+#include <windows.h>
 #pragma warning(disable : 4005)
 #ifndef WINGDIAPI
 #define CALLBACK    __stdcall
@@ -14,12 +43,27 @@
 #define DTB_EXTERN extern "C"
 #else
 #define DTB_EXTERN extern
+typedef char bool;
+#define true 1
+#define false 0
+#define NULL 0
 #endif
 
 #include <stddef.h>
 
 #include <gl/gl.h>
 #include <gl/glu.h>
+
+typedef  char GLchar;
+typedef unsigned int GLuint;
+typedef int GLint;
+typedef void GLvoid;
+
+
+
+typedef unsigned int uint;
+typedef unsigned short ushort;
+typedef unsigned char uchar;
 
 #define GL_TEXTURE0_ARB								0x84C0
 
@@ -121,31 +165,111 @@
 #define GL_VERTEX_SHADER                  0x8B31
 #define GL_INFO_LOG_LENGTH				0x8B84
 
-typedef unsigned int uint;
-typedef unsigned short ushort;
-typedef unsigned char uchar;
-
-void *(*sui_gl_GetProcAddress)(const char* proc) = NULL;
-
-
-// NOTE(DILLON): Initializes extensions
-DTB_EXTERN void dtbgl_extension_init(void*(*glGetProcAddr)(const char* proc));
-
-// NOTE(DILLON): Gets address of extensions
-DTB_EXTERN void *dtbgl_extension_get_addr(const char* proc);
-
-// NOTE(DILLON): Is called by user and calls the other initializers
-DTB_EXTERN int dtbgl_init(void*(*glGetProcAddr)(const char* proc));
-
-// NOTE(DILLON): Initializes buffers
-DTB_EXTERN int dtbgl_buffer_init();
-
-
-
-// NOTE(DILLON): GL Calls
-
-void (APIENTRY *glBindBuffer)(GLenum target, GLuint buffer);
-
+#ifdef __cplusplus
+extern "C" {
+#endif
+	
+#ifdef _WIN32
+	// NOTE(DILLON): This is only Win32
+	DTB_EXTERN void *dtbgl_win32_grab_gl_address(const char *name);
+#endif
+	
+	// TODO(DILLON): Implement more opengl grabber address for different OS's
+	
+	// NOTE(DILLON): Initializes extensions
+	DTB_EXTERN void dtbgl_extension_init(void*(*glGetProcAddr)(const char* proc));
+	// NOTE(DILLON): Gets address of extensions
+	DTB_EXTERN void *dtbgl_extension_get_addr(const char* proc);
+	
+	// NOTE(DILLON): Initilizers for the wrapper
+	DTB_EXTERN bool dtbgl_buffer_init();
+	DTB_EXTERN bool dtbgl_shader_init();
+	
+	// NOTE(DILLON): Is called by user and calls the other initializers
+	DTB_EXTERN bool dtbgl_init(void*(*glGetProcAddr)(const char* proc));
+	
+	// NOTE(DILLON): Utility functions, not necessart for the wrapper to function
+	DTB_EXTERN bool dtbgl_create_shaders();
+	DTB_EXTERN void dtbgl_bind_buffer(); // TODO(DILLON): Write this
+	
+	// NOTE(DILLON): GL Calls
+	
+	// TODO(DILLON): Implement this
+	GLubyte *(APIENTRY *glGetStringi)(GLenum name, GLuint index);
+	// TODO(DILLON): Implemetn this
+	
+	
+	void (APIENTRY *glBindVertexArray)(GLuint array);
+	void (APIENTRY *glGenVertexArrays)(GLsizei n, GLuint * arrays);
+	void (APIENTRY *glBindBuffer)(GLenum target, GLuint buffer);
+	void (APIENTRY *glGenBuffers)(GLsizei n, GLuint * buffers);
+	void (APIENTRY *glBufferData)(GLenum target, GLsizei size, const GLvoid * data, GLenum usage);
+	void (APIENTRY *glEnableVertexAttribArray)(GLuint index);
+	void (APIENTRY *glDisableVertexAttribArray)(GLuint index);
+	void (APIENTRY *glVertexAttribPointer)(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer);
+	void (APIENTRY *glBufferSubData)(GLenum target, size_t offset, size_t size, const void *data);
+	
+	GLuint(APIENTRY *glCreateShader)(GLenum shaderType);
+	void (APIENTRY *glShaderSource)(GLuint shader, GLsizei count, const GLchar **string, const GLint *length);
+	void (APIENTRY *glCompileShader)(GLenum shaderType);
+	void (APIENTRY *glGetShaderiv)(GLuint shader, GLenum pname, GLint *params);
+	void (APIENTRY *glGetShaderInfoLog)(GLuint shader, GLsizei max_length, GLsizei *length, GLchar *info_log);
+	void (APIENTRY *glDeleteShader)(GLuint shader);
+	GLuint(APIENTRY *glCreateProgram)();
+	void (APIENTRY *glAttachShader)(GLuint program, GLuint shader);
+	void (APIENTRY *glLinkProgram)(GLuint program);
+	void (APIENTRY *glGetProgramiv)(GLuint program, GLenum pname, GLint *params);
+	void (APIENTRY *glDeleteProgram)(GLuint program);
+	void (APIENTRY *glDetachShader)(GLuint program, GLuint shader);
+	void (APIENTRY *glGetProgramInfoLog)(GLuint program, GLsizei max_length, GLsizei *length, GLchar *info_log);
+	void (APIENTRY *glUseProgram)(GLuint program);
+	
+	GLint (APIENTRY *glGetUniformLocation)(GLuint program, GLchar *name);
+	
+	void (APIENTRY *glUniform1f)(GLint location, GLfloat v0);
+	void (APIENTRY *glUniform2f)(GLint location, GLfloat v0, GLfloat v1);
+	void (APIENTRY *glUniform3f)(GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
+	void (APIENTRY *glUniform4f)(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
+	
+	void (APIENTRY *glUniform1i)(GLint location, GLint v0);
+	void (APIENTRY *glUniform2i)(GLint location, GLint v0, GLint v1);
+	void (APIENTRY *glUniform3i)(GLint location, GLint v0, GLint v1, GLint v2);
+	void (APIENTRY *glUniform4i)(GLint location, GLint v0, GLint v1, GLint v2, GLint v3);
+	
+	void (APIENTRY *glUniform1ui)(GLint location, GLuint v0);
+	void (APIENTRY *glUniform2ui)(GLint location, GLuint v0, GLuint v1);
+	void (APIENTRY *glUniform3ui)(GLint location, GLuint v0, GLuint v1, GLuint v2);
+	void (APIENTRY *glUniform4ui)(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3);
+	
+	void (APIENTRY *glUniform1fv)(GLint location, GLsizei count, const GLfloat *value);
+	void (APIENTRY *glUniform2fv)(GLint location, GLsizei count, const GLfloat *value);
+	void (APIENTRY *glUniform3fv)(GLint location, GLsizei count, const GLfloat *value);
+	void (APIENTRY *glUniform4fv)(GLint location, GLsizei count, const GLfloat *value);
+	
+	void (APIENTRY *glUniform1iv)(GLint location, GLsizei count, const GLint *value);
+	void (APIENTRY *glUniform2iv)(GLint location, GLsizei count, const GLint *value);
+	void (APIENTRY *glUniform3iv)(GLint location, GLsizei count, const GLint *value);
+	void (APIENTRY *glUniform4iv)(GLint location, GLsizei count, const GLint *value);
+	
+	void (APIENTRY *glUniform1uiv)(GLint location, GLsizei count, const GLuint *value);
+	void (APIENTRY *glUniform2uiv)(GLint location, GLsizei count, const GLuint *value);
+	void (APIENTRY *glUniform3uiv)(GLint location, GLsizei count, const GLuint *value);
+	void (APIENTRY *glUniform4uiv)(GLint location, GLsizei count, const GLuint *value);
+	
+	void (APIENTRY *glUniformMatrix2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+	void (APIENTRY *glUniformMatrix3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+	void (APIENTRY *glUniformMatrix4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+	
+	void (APIENTRY *glUniformMatrix2x3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+	void (APIENTRY *glUniformMatrix3x2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+	void (APIENTRY *glUniformMatrix2x4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+	void (APIENTRY *glUniformMatrix4x2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+	void (APIENTRY *glUniformMatrix3x4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+	void (APIENTRY *glUniformMatrix4x3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+	
+#ifdef __cplusplus
+}
+#endif
 
 #define DTB_GL_H
 #endif

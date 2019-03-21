@@ -1,0 +1,12 @@
+TODO:
+* Write a function to create shaders
+* Write a function bind buffers
+* Implement a win32 way to grab OpenGL Address easily
+
+
+
+DOING:
+* Finish grabbing all functions for modern OpenGL
+
+
+DONE:

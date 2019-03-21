@@ -21,7 +21,6 @@
 
 #if defined _WIN32
 #pragma warning(disable:4996) //CRT
-#pragma warning(disable:4244) //Float conversion
 //Win32 bullshittery
 #define NOMINMAX
 #define NOCOMM
