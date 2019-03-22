@@ -199,7 +199,10 @@ extern "C" {
 	DTB_EXTERN uint dtbgl_create_ibo(size_t size, const void* data, GLenum usage_hint);
 	DTB_EXTERN uint dtbgl_create_vbo(size_t size, const void* data, GLenum usage_hint);
 	
+	DTB_EXTERN void dtbgl_draw_cube(float x, float y, float z, float edge_length);
 	DTB_EXTERN void dtbgl_draw_primitive_rect(float x, float y, float width, float height, float r, float g, float b, float a);
+	
+	DTB_EXTERN void dtbgl_setup_view_2d(int width, int height);
 	
 	// NOTE(DILLON): GL Calls
 	GLubyte *(APIENTRY *glGetStringi)(GLenum name, GLuint index);

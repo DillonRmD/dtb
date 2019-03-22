@@ -297,21 +297,36 @@ inline float V3_Dot(v3 left, v3 right)
 }
 
 
-inline m4 M4_Perspective(float right, float left, float top, float bottom, float mFar, float mNear)
+inline m4 M4_Frustum(float right, float left, float top, float bottom, float mFar, float mNear)
 {
 	m4 Result = {0};
 	
-	Result.elements[0][0] = ((2 * mNear) / (right - left));
-	Result.elements[0][2] = ((right + left) / (right - left));
-	Result.elements[1][1] = ((2 * mNear) / (top - bottom));
-	Result.elements[1][2] = ((top + bottom) / (top - bottom));
-	Result.elements[2][2] = (-(mFar + mNear) / (mFar - mNear));
-	Result.elements[2][3] = (-2 * (mFar * mNear) / (mFar - mNear));
-	Result.elements[3][2] = -1;
+	Result.elements[0][0] = 2 * mNear / (right - left);
+	Result.elements[1][1] = 2 * mNear / (top - bottom);
+	Result.elements[2][0] = (right + left) / (right - left);
+	Result.elements[2][1] = (top + bottom) / (top - bottom);
+	Result.elements[2][2] = -(mFar + mNear) / (mFar - mNear);
+	Result.elements[2][3] = -1;
+	Result.elements[3][2] = -2 * mFar * mNear / (mFar - mNear);
 	
 	return Result;
 }
+/*
+inline m4 M4_Perspective(float right, float left, float top, float bottom, float mFar, float mNear)
+{
+m4 Result = {0};
 
+Result.elements[0][0] = ((2 * mNear) / (right - left));
+Result.elements[0][2] = ((right + left) / (right - left));
+Result.elements[1][1] = ((2 * mNear) / (top - bottom));
+Result.elements[1][2] = ((top + bottom) / (top - bottom));
+Result.elements[2][2] = (-(mFar + mNear) / (mFar - mNear));
+Result.elements[2][3] = (-2 * (mFar * mNear) / (mFar - mNear));
+Result.elements[3][2] = -1;
+
+return Result;
+}
+*/
 inline m4 M4_Orthographic(float right, float left, float top, float bottom, float mFar, float mNear)
 {
 	m4 Result = {0};

@@ -359,6 +359,57 @@ uint dtbgl_create_vbo(size_t size, const void* data, GLenum usage_hint)
 	return dtbgl_create_buffer(size, data, GL_ARRAY_BUFFER, usage_hint);
 }
 
+void dtbgl_draw_cube(float x, float y, float z, float edge_length)
+{
+	float half_side_length = edge_length * 0.5f;
+	
+	float vertices[] =
+	{
+		//front face
+		x - half_side_length, y + half_side_length, z + half_side_length,
+		x + half_side_length, y + half_side_length, z + half_side_length,
+		x + half_side_length, y - half_side_length, z + half_side_length,
+		x - half_side_length, y - half_side_length, z + half_side_length,
+		
+		//back face
+		x - half_side_length, y + half_side_length, z - half_side_length,
+		x + half_side_length, y + half_side_length, z - half_side_length,
+		x + half_side_length, y - half_side_length, z - half_side_length,
+		x - half_side_length, y - half_side_length, z - half_side_length,
+		
+		//left face
+		x - half_side_length, y + half_side_length, z + half_side_length,
+		x - half_side_length, y + half_side_length, z - half_side_length,
+		x - half_side_length, y - half_side_length, z - half_side_length,
+		x - half_side_length, y - half_side_length, z + half_side_length,
+		
+		// right face
+		x + half_side_length, y + half_side_length, z + half_side_length,
+		x + half_side_length, y + half_side_length, z - half_side_length,
+		x + half_side_length, y - half_side_length, z - half_side_length,
+		x + half_side_length, y - half_side_length, z + half_side_length,
+		
+		// top face
+		x - half_side_length, y + half_side_length, z + half_side_length,
+		x - half_side_length, y + half_side_length, z - half_side_length,
+		x + half_side_length, y + half_side_length, z - half_side_length,
+		x + half_side_length, y + half_side_length, z + half_side_length,
+		
+		// bottom face
+		x - half_side_length, y - half_side_length, z + half_side_length,
+		x - half_side_length, y - half_side_length, z - half_side_length,
+		x + half_side_length, y - half_side_length, z - half_side_length,
+		x + half_side_length, y - half_side_length, z + half_side_length,
+	};
+	
+	
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glDrawArrays(GL_QUADS, 0, 24);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+
 void dtbgl_draw_primitive_rect(float x, float y, float width, float height, float r, float g, float b, float a)
 {
 	glBegin(GL_QUADS);
@@ -370,6 +421,16 @@ void dtbgl_draw_primitive_rect(float x, float y, float width, float height, floa
 		glVertex2f(x + width, y);
 	}
 	glEnd();
+}
+
+void dtbgl_setup_view_2d(int width, int height) 
+{
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0.0f, width, 0.0f, height, 0.0f, 1.0f);
+	glMatrixMode (GL_MODELVIEW);
+	glLoadIdentity();
 }
 
 uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shader)
