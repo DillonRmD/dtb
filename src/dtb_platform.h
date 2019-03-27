@@ -87,6 +87,8 @@ typedef enum
 	dtb_key_mb_left,
 	dtb_key_mb_right,
 	dtb_key_mb_middle,
+	dtb_key_mwheel_up,
+	dtb_key_mwheel_down,
 	dtb_key_mb_0,
 	dtb_key_mb_1,
 	dtb_key_backspace,
@@ -220,8 +222,16 @@ typedef struct
 	int cursorY;
 }dtb_platform;
 
+typedef struct
+{
+	POINT p;
+	HWND window;
+	HDC dc;
+	MSG msg;
+}dtb_win32;
+
 dtb_platform platform = {0};
-HWND window;
+dtb_win32 win32_platform = {0};
 
 void dtb_platform_log_error(char* msg, ...)
 {
@@ -269,6 +279,9 @@ dtb_key dtb_check_key(dtb_key key)
 	return dtb_key_invalid;
 }
 
+#define VK_MWHEEL_UP      0x86
+#define VK_MWHEEL_DOWN	  0x87
+
 dtb_key dtb_win32_map_key(int key)
 {
 	dtb_key result = dtb_key_invalid;
@@ -281,6 +294,10 @@ dtb_key dtb_win32_map_key(int key)
 		return dtb_key_mb_right;
 	case VK_MBUTTON:
 		return dtb_key_mb_middle;
+	case VK_MWHEEL_UP:
+		return dtb_key_mwheel_up;
+	case VK_MWHEEL_DOWN:
+		return dtb_key_mwheel_down;
 	case VK_XBUTTON1:
 		return dtb_key_mb_0;
 	case VK_XBUTTON2:
@@ -478,6 +495,52 @@ LRESULT CALLBACK win32_procedure(HWND window, UINT message, WPARAM wparam, LPARA
 				dtb_platform_log_error("Failed to make the context for opengl current!");
 			}
 		}break;
+	case WM_MOUSEWHEEL:
+		{
+			float mwheel_delta = GET_WHEEL_DELTA_WPARAM(wparam);
+
+			if(mwheel_delta > 0)
+			{
+				dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
+				e->data[0].u32_value = (u32)dtb_win32_map_key(VK_MWHEEL_UP);
+			}
+			else
+			{
+				dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
+				e->data[0].u32_value = (u32)dtb_win32_map_key(VK_MWHEEL_DOWN);
+			}
+		}break;
+	case WM_LBUTTONDOWN:
+		{
+			dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
+			e->data[0].u32_value = (u32)dtb_win32_map_key(VK_LBUTTON);
+		}break;
+	case WM_RBUTTONDOWN:
+		{
+			dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
+			e->data[0].u32_value = (u32)dtb_win32_map_key(VK_RBUTTON);
+		}break;
+	case WM_MBUTTONDOWN:
+		{
+			dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
+			e->data[0].u32_value = (u32)dtb_win32_map_key(VK_MBUTTON);
+		}break;
+	case WM_XBUTTONDOWN:
+		{
+			int x_button = GET_XBUTTON_WPARAM(wparam);
+
+			if(x_button == 0x001)
+			{
+				dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
+				e->data[0].u32_value = (u32)dtb_win32_map_key(VK_XBUTTON1);
+			}
+			
+			if(x_button == 0x002)
+			{
+				dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
+				e->data[0].u32_value = (u32)dtb_win32_map_key(VK_XBUTTON2);
+			}
+		}break;
 	case WM_KEYUP:
 		{
 			u32 vk_code = (u32)wparam;
@@ -582,21 +645,21 @@ bool dtb_platform_init(char* title, int width, int height)
 	wc.lpszClassName = platform.window_title;
 	RegisterClass(&wc);
 
-	window = CreateWindow(wc.lpszClassName, platform.window_title, 
+	win32_platform.window = CreateWindow(wc.lpszClassName, platform.window_title, 
 		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
 		platform.window_width, platform.window_height,
 		0, 0, wc.hInstance, 0);
 
-	if(!window)
+	if(!win32_platform.window)
 	{
 		dtb_platform_log_error("Failed to create win32 window");
 		return false;
 	}
 
-	HDC dc = GetDC(window);
+	win32_platform.dc = GetDC(win32_platform.window);
 
-	ShowWindow(window, SW_SHOW);
-	UpdateWindow(window);
+	ShowWindow(win32_platform.window, SW_SHOW);
+	UpdateWindow(win32_platform.window);
 
 	platform.cursorX = 0;
 	platform.cursorY = 0;
@@ -605,25 +668,22 @@ bool dtb_platform_init(char* title, int width, int height)
 	return true;
 }
 
-POINT p;
-
 void dtb_platform_update()
 {
-	HDC dc = GetDC(window);
-	MSG msg;
+	win32_platform.dc = GetDC(win32_platform.window);
 	platform.number_events = 0;
-	if(PeekMessage(&msg, window, 0, 0, PM_REMOVE))
+	if(PeekMessage(&win32_platform.msg, win32_platform.window, 0, 0, PM_REMOVE))
 	{
-		GetCursorPos(&p);
-		ScreenToClient(window, &p);
-		platform.cursorX = p.x;
-		platform.cursorY = p.y;
+		GetCursorPos(&win32_platform.p);
+		ScreenToClient(win32_platform.window, &win32_platform.p);
+		platform.cursorX = win32_platform.p.x;
+		platform.cursorY = win32_platform.p.y;
 
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		TranslateMessage(&win32_platform.msg);
+		DispatchMessage(&win32_platform.msg);
 	}
 
-	SwapBuffers(dc);
+	SwapBuffers(win32_platform.dc);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

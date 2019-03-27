@@ -92,3 +92,15 @@ build/dtb_test.exe
 build/SDL2.dll
 build/SDL2.lib
 build/SDL2main.lib
+*.tlog
+build/dtb.exe
+dtb.sdf
+*.suo
+*.vcxproj
+*.user
+*.filters
+intermediates/dtb.lastbuildstate
+intermediates/dtb.exe.intermediate.manifest
+intermediates/dtb.log
+intermediates/vc100.idb
+*.ipch
