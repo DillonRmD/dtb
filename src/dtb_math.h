@@ -108,11 +108,28 @@ inline v2 V2_Add(v2 left, v2 right)
 	return result;
 }
 
+inline v2 V2_Addf(v2 left, float right)
+{
+	v2 result = {0};
+	result.x = left.x + right;
+	result.y = left.y + right;
+	return result;
+}
+
+
 inline v2 V2_Subtract(v2 left, v2 right)
 {
 	v2 result = {0};
 	result.x = left.x - right.x;
 	result.y = left.y - right.y;
+	return result;
+}
+
+inline v2 V2_Subtractf(v2 left, float right)
+{
+	v2 result = {0};
+	result.x = left.x - right;
+	result.y = left.y - right;
 	return result;
 }
 
@@ -124,6 +141,15 @@ inline v2 V2_Multiply(v2 left, v2 right)
 	return result;
 }
 
+inline v2 V2_Multiplyf(v2 left, float right)
+{
+	v2 result = {0};
+	result.x = left.x * right;
+	result.y = left.y * right;
+	return result;
+}
+
+
 inline v2 V2_Divide(v2 left, v2 right)
 {
 	v2 result = {0};
@@ -131,6 +157,15 @@ inline v2 V2_Divide(v2 left, v2 right)
 	result.y = left.y / right.y;
 	return result;
 }
+
+inline v2 V2_Dividef(v2 left, float right)
+{
+	v2 result = {0};
+	result.x = left.x / right;
+	result.y = left.y / right;
+	return result;
+}
+
 
 // NOTE(DILLON): Vector 3's
 inline v3 V3(float x, float y, float z)
@@ -157,12 +192,30 @@ inline v3 V3_Add(v3 left, v3 right)
 	return result;
 }
 
+inline v3 V3_Addf(v3 left, float right)
+{
+	v3 result = {0};
+	result.x = left.x + right;
+	result.x = left.y + right;
+	result.x = left.z + right;
+	return result;
+}
+
 inline v3 V3_Subtract(v3 left, v3 right)
 {
 	v3 result = {0};
 	result.x = left.x - right.x;
 	result.x = left.y - right.y;
 	result.x = left.z - right.z;
+	return result;
+}
+
+inline v3 V3_Subtractf(v3 left, float right)
+{
+	v3 result = {0};
+	result.x = left.x - right;
+	result.x = left.y - right;
+	result.x = left.z - right;
 	return result;
 }
 
@@ -175,6 +228,15 @@ inline v3 V3_Multiply(v3 left, v3 right)
 	return result;
 }
 
+inline v3 V3_Multiplyf(v3 left, float right)
+{
+	v3 result = {0};
+	result.x = left.x * right;
+	result.x = left.y * right;
+	result.x = left.z * right;
+	return result;
+}
+
 inline v3 V3_Divide(v3 left, v3 right)
 {
 	v3 result = {0};
@@ -184,6 +246,14 @@ inline v3 V3_Divide(v3 left, v3 right)
 	return result;
 }
 
+inline v3 V3_Dividef(v3 left, float right)
+{
+	v3 result = {0};
+	result.x = left.x / right;
+	result.x = left.y / right;
+	result.x = left.z / right;
+	return result;
+}
 
 // NOTE(DILLON): Vector 4's
 inline v4 V4(float x, float y, float z, float w)
@@ -212,6 +282,16 @@ inline v4 V4_Add(v4 left, v4 right)
 	return result;
 }
 
+inline v4 V4_Addf(v4 left, float right)
+{
+	v4 result = {0};
+	result.x = left.x + right;
+	result.y = left.y + right;
+	result.z = left.z + right;
+	result.w = left.w + right;
+	return result;
+}
+
 inline v4 V4_Subtract(v4 left, v4 right)
 {
 	v4 result = {0};
@@ -219,6 +299,16 @@ inline v4 V4_Subtract(v4 left, v4 right)
 	result.y = left.y - right.y;
 	result.z = left.z - right.z;
 	result.w = left.w - right.w;
+	return result;
+}
+
+inline v4 V4_Subtractf(v4 left, float right)
+{
+	v4 result = {0};
+	result.x = left.x - right;
+	result.y = left.y - right;
+	result.z = left.z - right;
+	result.w = left.w - right;
 	return result;
 }
 
@@ -232,6 +322,16 @@ inline v4 V4_Multiply(v4 left, v4 right)
 	return result;
 }
 
+inline v4 V4_Multiplyf(v4 left, float right)
+{
+	v4 result = {0};
+	result.x = left.x * right;
+	result.y = left.y * right;
+	result.z = left.z * right;
+	result.w = left.w * right;
+	return result;
+}
+
 inline v4 V4_Divide(v4 left, v4 right)
 {
 	v4 result = {0};
@@ -242,11 +342,75 @@ inline v4 V4_Divide(v4 left, v4 right)
 	return result;
 }
 
+inline v4 V4_Dividef(v4 left, float right)
+{
+	v4 result = {0};
+	result.x = left.x / right;
+	result.y = left.y / right;
+	result.z = left.z / right;
+	result.w = left.w / right;
+	return result;
+}
 
+inline m4 Mat4(){
+	m4 result = {0};
+	return result;
+}
 
+#ifdef __cplusplus
 
-// NOTE(DILLON): ExTRA STUFF
-inline float Sqrt(float number)
+inline v2 operator+(v2 left, v2 right){
+	return V2_Add(left, right);
+}
+
+inline v2 operator-(v2 left, v2 right){
+	return V2_Subtract(left, right);
+}
+
+inline v2 operator*(v2 left, v2 right){
+	return V2_Multiply(left, right);
+}
+
+inline v2 operator/(v2 left, v2 right){
+	return V2_Divide(left, right);
+}
+
+inline v3 operator+(v3 left, v3 right){
+	return V3_Add(left, right);
+}
+
+inline v3 operator-(v3 left, v3 right){
+	return V3_Subtract(left, right);
+}
+
+inline v3 operator*(v3 left, v3 right){
+	return V3_Multiply(left, right);
+}
+
+inline v3 operator/(v3 left, v3 right){
+	return V3_Divide(left, right);
+}
+
+inline v4 operator+(v4 left, v4 right){
+	return V4_Add(left, right);
+}
+
+inline v4 operator-(v4 left, v4 right){
+	return V4_Subtract(left, right);
+}
+
+inline v4 operator*(v4 left, v4 right){
+	return V4_Multiply(left, right);
+}
+
+inline v4 operator/(v4 left, v4 right){
+	return V4_Divide(left, right);
+}
+
+#endif
+
+// NOTE(DILLON): EXTRA STUFF
+inline float dtb_sqrt(float number)
 {
 	int i;
 	float x, y;
@@ -266,7 +430,7 @@ inline v3 V3_Normalize(v3 vec)
 	v3 Result = { 0 };
 	
 	float f;
-	f = Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	f = dtb_sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 	vec.x /= f;
 	vec.y /= f;
 	vec.z /= f;

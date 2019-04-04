@@ -433,6 +433,91 @@ void dtbgl_setup_view_2d(int width, int height)
 	glLoadIdentity();
 }
 
+uint dtbgl_create_shaders_file(char* vert_name, char* frag_name){
+	
+	char info_log[512];
+	int success;
+	int code_lengths[] = {-1, -1, -1, -1, -1, -1};
+	
+	
+	//Vertex Shader BEGIN
+	FILE* vert_file = fopen(vert_name, "rb");
+	
+	if(!vert_file){
+		printf("DTB_GL: Failed to load shader file %s\n", vert_name);
+		return NULL;
+	}
+	
+	fseek(vert_file, 0, SEEK_END);
+	size_t file_size = ftell(vert_file);
+	rewind(vert_file);
+	
+	char* vert_code = (char*)malloc(file_size + 1);
+	fread(vert_code, file_size, 1, vert_file);
+	fclose(vert_file);
+	
+	GLuint vert_shader_id = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vert_shader_id,
+				   sizeof(vert_code) / sizeof(vert_code[0]),
+				   (GLchar**)vert_code,
+				   code_lengths);
+	
+	glCompileShader(vert_shader_id);
+	glGetShaderiv(vert_shader_id, GL_COMPILE_STATUS, &success);
+	if(!success)
+	{
+		glGetShaderInfoLog(vert_shader_id, 512, 0, info_log);
+		printf("%s\n", info_log);
+	}
+	
+	
+	// Fragment Shader BEGIN
+	FILE* frag_file = fopen(frag_name, "rb");
+	if(!frag_file){
+		printf("DTB_GL: Failed to load shader file %s\n", frag_name);
+		return NULL;
+	}
+	
+	fseek(frag_file, 0, SEEK_END);
+	file_size = ftell(frag_file);
+	rewind(frag_file);
+	
+	char* frag_code = (char*)malloc(file_size + 1);
+	fread(frag_code, file_size, 1, frag_file);
+	fclose(frag_file);
+	
+	GLuint frag_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(frag_shader_id,
+				   sizeof(frag_code) / sizeof(frag_code[0]),
+				   (GLchar**)frag_code,
+				   code_lengths);
+	
+	
+	glCompileShader(frag_shader_id);
+	glGetShaderiv(frag_shader_id, GL_COMPILE_STATUS, &success);
+	if(!success)
+	{
+		glGetShaderInfoLog(frag_shader_id, 512, 0, info_log);
+		printf("%s\n", info_log);
+	}
+	
+	uint program_id = glCreateProgram();
+	glAttachShader(program_id, vert_shader_id);
+	glAttachShader(program_id, frag_shader_id);
+	
+	glLinkProgram(program_id);
+	
+	glGetProgramiv(program_id, GL_LINK_STATUS, &success);
+	if(!success)
+	{
+		glGetProgramInfoLog(program_id, 512, NULL, info_log);
+		printf("%s\n", info_log);
+	}
+	
+	return program_id;
+	
+}
+
 uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shader)
 {
 	char info_log[512];

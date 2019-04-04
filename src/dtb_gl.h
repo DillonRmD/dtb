@@ -35,6 +35,8 @@
 // NOTE(DILLON): Disables macro redefinition warning
 #include <windows.h>
 #pragma warning(disable : 4005)
+#pragma comment(lib, "opengl32.lib")
+#pragma comment(lib, "glu32.lib")
 #ifndef WINGDIAPI
 #define CALLBACK    __stdcall
 #define WINGDIAPI   __declspec(dllimport)
@@ -62,8 +64,6 @@ typedef  char GLchar;
 typedef unsigned int GLuint;
 typedef int GLint;
 typedef void GLvoid;
-
-
 
 typedef unsigned int uint;
 typedef unsigned short ushort;
