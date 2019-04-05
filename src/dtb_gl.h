@@ -190,7 +190,7 @@ extern "C" {
 	DTB_EXTERN bool dtbgl_shader_init();
 	
 	// NOTE(DILLON): Is called by user and calls the other initializers
-	DTB_EXTERN bool dtbgl_init(void*(*glGetProcAddr)(const char* proc));
+	DTB_EXTERN bool dtbgl_init();
 	
 	// NOTE(DILLON): Utility functions, not necessart for the wrapper to function
 	DTB_EXTERN uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shader);
