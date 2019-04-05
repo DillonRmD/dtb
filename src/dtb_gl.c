@@ -583,9 +583,9 @@ uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shade
 	return program_id;
 }
 
-bool dtbgl_init(void*(*glGetProcAddr)(const char* proc))
+bool dtbgl_init()
 {
-	dtbgl_extension_init(glGetProcAddr);
+	dtbgl_extension_init(dtbgl_win32_grab_gl_address);
 	
 	glGetStringi = dtbgl_extension_get_addr("glGetStringi");
 	if(glGetStringi == NULL)
