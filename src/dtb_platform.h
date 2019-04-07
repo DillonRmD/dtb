@@ -461,7 +461,7 @@ dtb_key dtb_win32_map_key(int key)
 
 LRESULT CALLBACK win32_procedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
 {
-	HGLRC gl_context;
+	HGLRC gl_context = NULL;
 
 	switch(message)
 	{	

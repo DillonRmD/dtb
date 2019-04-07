@@ -193,6 +193,7 @@ extern "C" {
 	DTB_EXTERN bool dtbgl_init();
 	
 	// NOTE(DILLON): Utility functions, not necessart for the wrapper to function
+	DTB_EXTERN uint dtbgl_create_shaders_file(char* vert_name, char* frag_name);
 	DTB_EXTERN uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shader);
 	DTB_EXTERN uint dtbgl_create_buffer(size_t size, const void* data, GLenum target, GLenum usage_hint);
 	
