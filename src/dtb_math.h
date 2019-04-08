@@ -16,6 +16,8 @@
 
 #if !defined DTB_MATH_H
 
+#include <math.h>
+
 typedef union v2
 {
 	struct
@@ -410,7 +412,11 @@ inline v4 operator/(v4 left, v4 right){
 #endif
 
 // NOTE(DILLON): EXTRA STUFF
-inline float dtb_sqrt(float number)
+
+#define PI 3.14159265359
+#define TWO_PI PI * 2
+
+inline float Sqrt(float number)
 {
 	int i;
 	float x, y;
@@ -430,7 +436,7 @@ inline v3 V3_Normalize(v3 vec)
 	v3 Result = { 0 };
 	
 	float f;
-	f = dtb_sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	f = Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 	vec.x /= f;
 	vec.y /= f;
 	vec.z /= f;
@@ -559,6 +565,24 @@ inline v2 Cross2f(v2 vec)
 	result.x = vec.y;
 	result.y = -vec.x;
 	return result;
+}
+
+inline float RandomFloat(float a, float b)
+{
+	float random = ((float)rand()) / (float)RAND_MAX;
+	float diff = b - a;
+	float r = random * diff;
+	return a + r;
+}
+
+inline float Distancef(float x1, float y1, float x2, float y2)
+{
+	return Sqrt(powf(x2 - x1, 2) + powf(y2 - y1, 2));
+}
+
+inline float Distancev(v2 left, v2 right)
+{
+	return Sqrt(powf(right.x - left.x, 2) + powf(right.y - left.y, 2));
 }
 
 #define DTB_MATH_H

@@ -1,21 +1,18 @@
 TODO:
 
 dtb.h:
-	* Deprecate dtb.h, end it's development cycle and scrap it. 
+* Deprecate dtb.h, end it's development cycle and scrap it. 
 
 dtb_gl.h:
-	* Write a function for texture bindings
-	* Add opengl address grabbers for linux and mac
-	* 
+* Write a function for texture bindings
+* Add opengl address grabbers for linux and mac
+* 
 
 dtb_platform.h:
-	* Performance checker
-	* Find a way to remove global struct platform
-	
+* Performance checker
+* Find a way to remove global struct platform
+
 dtb_math.h:
-	* Implement A PI macro
-	* Implement a random float generator
-	* Implement a distance finder function
-	* Expand the vector math sets
-	* Implement slope intercept y = mx + b;
-	
+* Implement a distance finder function
+* Expand the vector math sets
+* Implement slope intercept y = mx + b;
