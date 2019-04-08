@@ -1,13 +1,21 @@
 TODO:
-* Write a function to create shaders
-* Write a function bind buffers
-* Write a function for texture binding
-* Easy draw functions i.e. DrawRectangle, DrawCube
 
+dtb.h:
+	* Deprecate dtb.h, end it's development cycle and scrap it. 
 
-DOING:
-* Finish grabbing all functions for modern OpenGL
+dtb_gl.h:
+	* Write a function for texture bindings
+	* Add opengl address grabbers for linux and mac
+	* 
 
-
-DONE:
-* Implement a win32 way to grab OpenGL Address easily
+dtb_platform.h:
+	* Performance checker
+	* Find a way to remove global struct platform
+	
+dtb_math.h:
+	* Implement A PI macro
+	* Implement a random float generator
+	* Implement a distance finder function
+	* Expand the vector math sets
+	* Implement slope intercept y = mx + b;
+	
