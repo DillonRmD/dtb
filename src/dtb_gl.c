@@ -423,14 +423,110 @@ void dtbgl_draw_primitive_rect(float x, float y, float width, float height, floa
 	glEnd();
 }
 
-void dtbgl_setup_view_2d(int width, int height) 
+
+// NOTE(DILLON): bool refers the direction rendering or screencoords
+void dtbgl_setup_view_2d(int width, int height, bool top_down) 
 {
-	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0f, width, 0.0f, height, 0.0f, 1.0f);
+	if(top_down == true)
+		glOrtho(0.0f, width, height, 0.0f, -1, 1);
+	else
+		glOrtho(0.0f, width, 0.0f, height, -1, 1);
+	
 	glMatrixMode (GL_MODELVIEW);
 	glLoadIdentity();
+}
+uint dtbgl_create_shaders_file(char* vert_name, char* frag_name)
+{
+	
+	char info_log[512];
+	int success;
+	int code_lengths[] = {-1, -1, -1, -1, -1, -1};
+	
+	FILE* vert_file = fopen(vert_name, "r");
+	if(!vert_file)
+	{
+		printf("LOADFILE SHIT\n");
+	}
+	
+	fseek(vert_file, 0, SEEK_END);
+	size_t v_file_size = ftell(vert_file);
+	rewind(vert_file);
+	
+	char* vert_source = (char*)malloc(v_file_size + 1);
+	fread(vert_source, v_file_size, 1, vert_file);
+	fclose(vert_file);
+	
+	char* vert_code[] =
+	{
+		vert_source
+	};
+	
+	GLuint vert_shader_id = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vert_shader_id,
+				   sizeof(vert_code) / sizeof(vert_code[0]),
+				   (GLchar**)vert_code - 1,
+				   code_lengths);
+	
+	glCompileShader(vert_shader_id);
+	glGetShaderiv(vert_shader_id, GL_COMPILE_STATUS, &success);
+	if(!success)
+	{
+		glGetShaderInfoLog(vert_shader_id, 512, 0, info_log);
+		printf("%s\n", info_log);
+	}
+	
+	
+	FILE* frag_file = fopen(frag_name, "r");
+	if(!frag_file)
+	{
+		printf("LOADFILE SHIT\n");
+	}
+	
+	fseek(frag_file, 0, SEEK_END);
+	size_t f_file_size = ftell(frag_file);
+	rewind(frag_file);
+	
+	char* frag_source = (char*)malloc(f_file_size + 1);
+	fread(frag_source, f_file_size, 1, frag_file);
+	fclose(frag_file);
+	
+	char* frag_code[] =
+	{
+		frag_source
+	};
+	
+	GLuint frag_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(frag_shader_id,
+				   sizeof(frag_code) / sizeof(frag_code[0]),
+				   (GLchar**)frag_code - 1,
+				   code_lengths);
+	
+	
+	glCompileShader(frag_shader_id);
+	glGetShaderiv(frag_shader_id, GL_COMPILE_STATUS, &success);
+	if(!success)
+	{
+		glGetShaderInfoLog(frag_shader_id, 512, 0, info_log);
+		printf("%s\n", info_log);
+	}
+	
+	
+	uint program_id = glCreateProgram();
+	glAttachShader(program_id, vert_shader_id);
+	glAttachShader(program_id, frag_shader_id);
+	
+	glLinkProgram(program_id);
+	
+	glGetProgramiv(program_id, GL_LINK_STATUS, &success);
+	if(!success)
+	{
+		glGetProgramInfoLog(program_id, 512, NULL, info_log);
+		printf("%s\n", info_log);
+	}
+	
+	return program_id;
 }
 
 uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shader)
@@ -501,6 +597,12 @@ uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shade
 bool dtbgl_init()
 {
 	dtbgl_extension_init(dtbgl_win32_grab_gl_address);
+	
+	glGenerateMipmap = dtbgl_extension_get_addr("glGenerateMipmap");
+	if(glGenerateMipmap == NULL)
+	{
+		return false;
+	}
 	
 	glGetStringi = dtbgl_extension_get_addr("glGetStringi");
 	if(glGetStringi == NULL)
