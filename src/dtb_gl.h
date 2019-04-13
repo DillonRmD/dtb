@@ -203,10 +203,11 @@ extern "C" {
 	DTB_EXTERN void dtbgl_draw_cube(float x, float y, float z, float edge_length);
 	DTB_EXTERN void dtbgl_draw_primitive_rect(float x, float y, float width, float height, float r, float g, float b, float a);
 	
-	DTB_EXTERN void dtbgl_setup_view_2d(int width, int height);
+	DTB_EXTERN void dtbgl_setup_view_2d(int width, int height, bool top_down);
 	
 	// NOTE(DILLON): GL Calls
 	GLubyte *(APIENTRY *glGetStringi)(GLenum name, GLuint index);
+	void *(APIENTRY *glGenerateMipmap)(GLenum target);
 	
 	// NOTE(DILLON): Buffers
 	void (APIENTRY *glBindVertexArray)(GLuint array);
