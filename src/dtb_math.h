@@ -81,6 +81,11 @@ typedef union v4
 	
 }v4;
 
+typedef struct circle
+{
+	float radius, x, y;
+}circle;
+
 typedef struct m4
 {
 	float elements[4][4];
@@ -583,6 +588,16 @@ inline float Distancef(float x1, float y1, float x2, float y2)
 inline float Distancev(v2 left, v2 right)
 {
 	return Sqrt(powf(right.x - left.x, 2) + powf(right.y - left.y, 2));
+}
+
+inline int IsCircleColliding(circle c1, circle c2)
+{
+	return Distancef(c1.x, c1.y, c2.x, c2.y) <= c1.radius + c2.radius;
+}
+
+inline int IsCirclePointColliding(float x, float y, circle c)
+{
+	return Distancef(x, y, c.x, c.y) < c.radius;
 }
 
 #define DTB_MATH_H
