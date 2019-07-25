@@ -18,6 +18,16 @@
 
 #include <math.h>
 
+#define PI 3.14159265358979323846
+#define PI32 3.14159265359f
+#define TWO_PI PI * 2
+
+#define MIN(a, b) a > b ? b : a
+#define MAX(a, b) a < b ? b : a
+#define ABS(a) (a > 0 ? a : -(a))
+#define MOD(a, m) ((a) % (m)) >= 0 ? ((a) % (m)) : (((a) % (m)) + (m))
+#define SQUARE(x) x * x
+
 typedef union v2
 {
 	struct
@@ -91,6 +101,29 @@ typedef struct m4
 	float elements[4][4];
 }m4;
 
+
+// NOTE(DILLON): Strictly utitily functions outside of math structures
+inline float ToRadians(float degrees){
+	float result = degrees * (PI32 / 180.f);
+	return result;
+}
+
+inline float Lerp(float a, float time, float b){
+	float result = (1.0f, - time) * a + time * b;
+	return result;
+}
+
+inline float Clamp(float min, float value, float max){
+	float result = value;
+	
+	if(result < min){
+		result = min;
+	} else if(result > max){
+		result = max;
+	}
+	
+	return result;
+}
 
 // NOTE(DILLON): Vector 2's
 inline v2 V2(float x, float y)
@@ -359,10 +392,77 @@ inline v4 V4_Dividef(v4 left, float right)
 	return result;
 }
 
-inline m4 Mat4(){
+// NOTE(DILLON): Matrix4x4
+
+inline m4 M4(){
 	m4 result = {0};
 	return result;
 }
+
+inline m4 M4d(float diagonal){
+	m4 result = M4();
+	
+	result.elements[0][0] = diagonal;
+	result.elements[1][1] = diagonal;
+	result.elements[2][2] = diagonal;
+	result.elements[3][3] = diagonal;
+	return result;
+}
+
+inline m4 M4_Add(m4 left, m4 right){
+	m4 result;
+	
+	for(int columns = 0; columns < 4; columns++){
+		for(int rows = 0; rows < 4; rows++){
+			result.elements[columns][rows] = left.elements[columns][rows] + right.elements[columns][rows];
+		}
+	}
+	
+	return result;
+}
+
+
+inline m4 M4_Subtract(m4 left, m4 right){
+	m4 result;
+	
+	for(int columns = 0; columns < 4; columns++){
+		for(int rows = 0; rows < 4; rows++){
+			result.elements[columns][rows] = left.elements[columns][rows] - right.elements[columns][rows];
+		}
+	}
+	
+	return result;
+}
+
+inline m4 M4_Multiply(m4 left, m4 right){
+	m4 result;
+	
+	for(int columns = 0; columns < 4; columns++){
+		for(int rows = 0; rows < 4; rows++){
+			float sum = 0;
+			for(int current_matrice = 0; current_matrice < 4; current_matrice++){
+				sum += left.elements[current_matrice][rows] * right.elements[columns][current_matrice];
+			}
+			
+			result.elements[columns][rows] = sum;
+		}
+	}
+	
+	return result;
+}
+
+inline m4 M4_Dividef(m4 matrix, float scalar){
+	m4 result;
+	
+	for(int columns = 0; columns < 4; columns++){
+		for(int rows = 0; rows < 4; rows++){
+			result.elements[columns][rows] = matrix.elements[columns][rows] / scalar;
+		}
+	}
+	
+	return result;
+}
+
 
 #ifdef __cplusplus
 
@@ -414,12 +514,23 @@ inline v4 operator/(v4 left, v4 right){
 	return V4_Divide(left, right);
 }
 
+inline m4 operator+(m4 left, m4 right){
+	return M4_Add(left, right);
+}
+
+inline m4 operator-(m4 left, m4 right){
+	return M4_Subtract(left, right);
+}
+
+inline m4 operator*(m4 left, m4 right){
+	return M4_Multiply(left, right);
+}
+
+inline m4 operator/(m4 left, float scalar){
+	return M4_Dividef(left, scalar);
+}
+
 #endif
-
-// NOTE(DILLON): EXTRA STUFF
-
-#define PI 3.14159265359
-#define TWO_PI PI * 2
 
 inline float Sqrt(float number)
 {
@@ -471,8 +582,15 @@ inline float V3_Dot(v3 left, v3 right)
 	return (Result);
 }
 
+inline m4 Rotate(float angle, v3 axis){
+	m4 result = M4d(1.0f);
+	
+	axis = V3_Normalize(axis);
+	
+	float sin_theta = sin(ToRadians(angle));
+}
 
-inline m4 M4_Frustum(float right, float left, float top, float bottom, float mFar, float mNear)
+inline m4 Frustum(float right, float left, float top, float bottom, float mFar, float mNear)
 {
 	m4 Result = {0};
 	
@@ -486,23 +604,8 @@ inline m4 M4_Frustum(float right, float left, float top, float bottom, float mFa
 	
 	return Result;
 }
-/*
-inline m4 M4_Perspective(float right, float left, float top, float bottom, float mFar, float mNear)
-{
-m4 Result = {0};
 
-Result.elements[0][0] = ((2 * mNear) / (right - left));
-Result.elements[0][2] = ((right + left) / (right - left));
-Result.elements[1][1] = ((2 * mNear) / (top - bottom));
-Result.elements[1][2] = ((top + bottom) / (top - bottom));
-Result.elements[2][2] = (-(mFar + mNear) / (mFar - mNear));
-Result.elements[2][3] = (-2 * (mFar * mNear) / (mFar - mNear));
-Result.elements[3][2] = -1;
-
-return Result;
-}
-*/
-inline m4 M4_Orthographic(float right, float left, float top, float bottom, float mFar, float mNear)
+inline m4 Orthographic(float right, float left, float top, float bottom, float mFar, float mNear)
 {
 	m4 Result = {0};
 	
@@ -517,7 +620,7 @@ inline m4 M4_Orthographic(float right, float left, float top, float bottom, floa
 	return Result;
 }
 
-inline m4 M4_Projection(float right, float left, float top, float bottom, float mFar, float mNear)
+inline m4 Projection(float right, float left, float top, float bottom, float mFar, float mNear)
 {
 	m4 Result = {0};
 	
@@ -532,8 +635,23 @@ inline m4 M4_Projection(float right, float left, float top, float bottom, float 
 	return Result;
 }
 
+inline m4 Perspective(float FOV, float AspectRatio, float Near, float Far)
+{
+	m4 Result = {0};
+	
+    float Cotangent = 1.0f / tan(FOV * ( 3.14 / 360.0f));
+    
+    Result.elements[0][0] = Cotangent / AspectRatio;
+    Result.elements[1][1] = Cotangent;
+    Result.elements[2][3] = -1.0f;
+    Result.elements[2][2] = (Near + Far) / (Near - Far);
+    Result.elements[3][2] = (2.0f * Near * Far) / (Near - Far);
+    Result.elements[3][3] = 0.0f;
+	
+    return (Result);
+}
 
-inline m4 M4_LookAt(v3 Eye, v3 Center, v3 Up)
+inline m4 LookAt(v3 Eye, v3 Center, v3 Up)
 {
 	m4 Result;
 	
@@ -589,6 +707,30 @@ inline float Distancev(v2 left, v2 right)
 {
 	return Sqrt(powf(right.x - left.x, 2) + powf(right.y - left.y, 2));
 }
+
+inline float V2_Length(v2 vec)
+{
+	return Sqrt(vec.x * vec.x + vec.y * vec.y);
+}
+
+inline float V3_Length(v3 vec)
+{
+	return Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+}
+
+inline float V4_Length(v4 vec)
+{
+	return Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
+}
+
+inline void V2_SetAngle(v2 vec, float angle)
+{
+	float length = V2_Length(vec);
+	
+	vec.x = cos(angle) * length;
+	vec.y = sin(angle) * length;
+}
+
 
 inline int IsCircleColliding(circle c1, circle c2)
 {
