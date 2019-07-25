@@ -108,7 +108,7 @@ typedef enum
 	dtb_key_ctrl,
 	dtb_key_left_ctrl,
 	dtb_key_right_ctrl,
-
+	
 	dtb_key_a,
 	dtb_key_b,
 	dtb_key_c,
@@ -135,7 +135,7 @@ typedef enum
 	dtb_key_x,
 	dtb_key_y,
 	dtb_key_z,
-
+	
 	dtb_key_0,
 	dtb_key_1,
 	dtb_key_2,
@@ -146,7 +146,7 @@ typedef enum
 	dtb_key_7,
 	dtb_key_8,
 	dtb_key_9,
-
+	
 	dtb_key_F1,
 	dtb_key_F2,
 	dtb_key_F3,
@@ -213,7 +213,7 @@ typedef struct
 {
 	int number_events;
 	dtb_system_event event_queue[DTB_MAX_QUEUED_EVENTS];
-
+	
 	int window_width;
 	int window_height;
 	char* window_title;
@@ -247,7 +247,7 @@ void dtb_platform_log_error(char* msg, ...)
 dtb_system_event *dtb_queue_event(dtb_system_event_type type)
 {
 	dtb_system_event *ev = platform.event_queue + (platform.number_events & DTB_MAX_QUEUED_EVENT_MASK);
-
+	
 	if(platform.number_events < DTB_MAX_QUEUED_EVENTS - 1)
 	{
 		++platform.number_events;
@@ -259,7 +259,7 @@ dtb_system_event *dtb_queue_event(dtb_system_event_type type)
 	ev->type = type;
 	ev->ptr_size = 0;
 	ev->ptr_data = 0;
-
+	
 	return ev;
 }
 
@@ -275,7 +275,7 @@ dtb_key dtb_check_key(dtb_key key)
 			}
 		}
 	}
-
+	
 	return dtb_key_invalid;
 }
 
@@ -285,176 +285,176 @@ dtb_key dtb_check_key(dtb_key key)
 dtb_key dtb_win32_map_key(int key)
 {
 	dtb_key result = dtb_key_invalid;
-
+	
 	switch(key)
 	{
-	case VK_LBUTTON:				//0x01
+		case VK_LBUTTON:				//0x01
 		return dtb_key_mb_left;
-	case VK_RBUTTON:				//0x02
+		case VK_RBUTTON:				//0x02
 		return dtb_key_mb_right;
-	case VK_MBUTTON:
+		case VK_MBUTTON:
 		return dtb_key_mb_middle;
-	case VK_MWHEEL_UP:
+		case VK_MWHEEL_UP:
 		return dtb_key_mwheel_up;
-	case VK_MWHEEL_DOWN:
+		case VK_MWHEEL_DOWN:
 		return dtb_key_mwheel_down;
-	case VK_XBUTTON1:
+		case VK_XBUTTON1:
 		return dtb_key_mb_0;
-	case VK_XBUTTON2:
+		case VK_XBUTTON2:
 		return dtb_key_mb_1;
-	case VK_BACK:
+		case VK_BACK:
 		return dtb_key_backspace;
-	case VK_TAB:
+		case VK_TAB:
 		return dtb_key_tab;
-	case VK_RETURN:
+		case VK_RETURN:
 		return dtb_key_enter;
-	case VK_SHIFT:
+		case VK_SHIFT:
 		return dtb_key_shift;
-	case VK_CONTROL:
+		case VK_CONTROL:
 		return dtb_key_ctrl;
-	case VK_PAUSE:
+		case VK_PAUSE:
 		return dtb_key_pause;
-	case VK_CAPITAL:
+		case VK_CAPITAL:
 		return dtb_key_caps_lock;
-	case VK_SPACE:
+		case VK_SPACE:
 		return dtb_key_space;
-	case VK_ESCAPE:
+		case VK_ESCAPE:
 		return dtb_key_escape;
-	case VK_LEFT:
+		case VK_LEFT:
 		return dtb_key_left;
-	case VK_RIGHT:
+		case VK_RIGHT:
 		return dtb_key_right;
-	case VK_DOWN:
+		case VK_DOWN:
 		return dtb_key_down;
-	case VK_UP:
+		case VK_UP:
 		return dtb_key_up;
-	case VK_LSHIFT:
+		case VK_LSHIFT:
 		return dtb_key_left_shift;
-	case VK_RSHIFT:
+		case VK_RSHIFT:
 		return dtb_key_right_shift;
-	case VK_LCONTROL:
+		case VK_LCONTROL:
 		return dtb_key_left_ctrl;
-	case VK_RCONTROL:
+		case VK_RCONTROL:
 		return dtb_key_right_ctrl;
-	case 0x30:
+		case 0x30:
 		return dtb_key_0;
-	case 0x31:
+		case 0x31:
 		return dtb_key_1;
-	case 0x32:
+		case 0x32:
 		return dtb_key_2;
-	case 0x33:
+		case 0x33:
 		return dtb_key_3;
-	case 0x34:
+		case 0x34:
 		return dtb_key_4;
-	case 0x35:
+		case 0x35:
 		return dtb_key_5;
-	case 0x36:
+		case 0x36:
 		return dtb_key_6;
-	case 0x37:
+		case 0x37:
 		return dtb_key_7;
-	case 0x38:
+		case 0x38:
 		return dtb_key_8;
-	case 0x39:
+		case 0x39:
 		return dtb_key_9;
-
-	case 0x41:
+		
+		case 0x41:
 		return dtb_key_a;
-	case 0x42:
+		case 0x42:
 		return dtb_key_b;
-	case 0x43:
+		case 0x43:
 		return dtb_key_c;
-	case 0x44:
+		case 0x44:
 		return dtb_key_d;
-	case 0x45:
+		case 0x45:
 		return dtb_key_e;
-	case 0x46:
+		case 0x46:
 		return dtb_key_f;
-	case 0x47:
+		case 0x47:
 		return dtb_key_g;
-	case 0x48:
+		case 0x48:
 		return dtb_key_h;
-	case 0x49:
+		case 0x49:
 		return dtb_key_i;
-	case 0x4A:
+		case 0x4A:
 		return dtb_key_j;
-	case 0x4B:
+		case 0x4B:
 		return dtb_key_k;
-	case 0x4C:
+		case 0x4C:
 		return dtb_key_l;
-	case 0x4D:
+		case 0x4D:
 		return dtb_key_m;
-	case 0x4E:
+		case 0x4E:
 		return dtb_key_n;
-	case 0x4F:
+		case 0x4F:
 		return dtb_key_o;
-	case 0x50:
+		case 0x50:
 		return dtb_key_p;
-	case 0x51:
+		case 0x51:
 		return dtb_key_q;
-	case 0x52:
+		case 0x52:
 		return dtb_key_r;
-	case 0x53:
+		case 0x53:
 		return dtb_key_s;
-	case 0x54:
+		case 0x54:
 		return dtb_key_t;
-	case 0x55:
+		case 0x55:
 		return dtb_key_u;
-	case 0x56:
+		case 0x56:
 		return dtb_key_v;
-	case 0x57:
+		case 0x57:
 		return dtb_key_w;
-	case 0x58:
+		case 0x58:
 		return dtb_key_x;
-	case 0x59:
+		case 0x59:
 		return dtb_key_y;
-	case 0x5A:
+		case 0x5A:
 		return dtb_key_z;
-
-	case VK_F1:
+		
+		case VK_F1:
 		return dtb_key_F1;
-	case VK_F2:
+		case VK_F2:
 		return dtb_key_F2;
-	case VK_F3:
+		case VK_F3:
 		return dtb_key_F3;
-	case VK_F4:
+		case VK_F4:
 		return dtb_key_F4;
-	case VK_F5:
+		case VK_F5:
 		return dtb_key_F5;
-	case VK_F6:
+		case VK_F6:
 		return dtb_key_F6;
-	case VK_F7:
+		case VK_F7:
 		return dtb_key_F7;
-	case VK_F8:
+		case VK_F8:
 		return dtb_key_F8;
-	case VK_F9:
+		case VK_F9:
 		return dtb_key_F9;
-	case VK_F10:
+		case VK_F10:
 		return dtb_key_F10;
-	case VK_F11:
+		case VK_F11:
 		return dtb_key_F11;
-	case VK_F12:
+		case VK_F12:
 		return dtb_key_F12;
-	case VK_F13:
+		case VK_F13:
 		return dtb_key_F13;
-	case VK_F14:
+		case VK_F14:
 		return dtb_key_F14;
-	case VK_F15:
+		case VK_F15:
 		return dtb_key_F15;
-	case VK_F16:
+		case VK_F16:
 		return dtb_key_F16;
-	case VK_F17:
+		case VK_F17:
 		return dtb_key_F17;
-	case VK_F18:
+		case VK_F18:
 		return dtb_key_F18;
-	case VK_F19:
+		case VK_F19:
 		return dtb_key_F19;
-	case VK_F20:
+		case VK_F20:
 		return dtb_key_F20;
-	case VK_F21:
+		case VK_F21:
 		return dtb_key_F21;
-	case VK_F22:
+		case VK_F22:
 		return dtb_key_F22;
-	default:
+		default:
 		return result;
 	}
 }
@@ -462,10 +462,10 @@ dtb_key dtb_win32_map_key(int key)
 LRESULT CALLBACK win32_procedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
 {
 	HGLRC gl_context = NULL;
-
+	
 	switch(message)
 	{	
-	case WM_CREATE:
+		case WM_CREATE:
 		{
 			HDC device_context = GetDC(window);
 			PIXELFORMATDESCRIPTOR pfd = { 0 };
@@ -476,15 +476,15 @@ LRESULT CALLBACK win32_procedure(HWND window, UINT message, WPARAM wparam, LPARA
 			pfd.cColorBits = 32;
 			pfd.cAlphaBits = 8;
 			pfd.iLayerType = PFD_MAIN_PLANE;
-
+			
 			int pf_index = ChoosePixelFormat(device_context, &pfd);
 			if(pf_index == 0){
 				dtb_platform_log_error("Failed to choose a pixel format");
 			}
-
+			
 			PIXELFORMATDESCRIPTOR suggested_pfd;
 			DescribePixelFormat(device_context, pf_index, sizeof(suggested_pfd), &suggested_pfd);
-
+			
 			if(!SetPixelFormat(device_context, pf_index, &pfd))
 			{
 				dtb_platform_log_error("Failed to Set the pixel format for opengl");
@@ -495,10 +495,10 @@ LRESULT CALLBACK win32_procedure(HWND window, UINT message, WPARAM wparam, LPARA
 				dtb_platform_log_error("Failed to make the context for opengl current!");
 			}
 		}break;
-	case WM_MOUSEWHEEL:
+		case WM_MOUSEWHEEL:
 		{
 			float mwheel_delta = GET_WHEEL_DELTA_WPARAM(wparam);
-
+			
 			if(mwheel_delta > 0)
 			{
 				dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
@@ -510,25 +510,25 @@ LRESULT CALLBACK win32_procedure(HWND window, UINT message, WPARAM wparam, LPARA
 				e->data[0].u32_value = (u32)dtb_win32_map_key(VK_MWHEEL_DOWN);
 			}
 		}break;
-	case WM_LBUTTONDOWN:
+		case WM_LBUTTONDOWN:
 		{
 			dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
 			e->data[0].u32_value = (u32)dtb_win32_map_key(VK_LBUTTON);
 		}break;
-	case WM_RBUTTONDOWN:
+		case WM_RBUTTONDOWN:
 		{
 			dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
 			e->data[0].u32_value = (u32)dtb_win32_map_key(VK_RBUTTON);
 		}break;
-	case WM_MBUTTONDOWN:
+		case WM_MBUTTONDOWN:
 		{
 			dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
 			e->data[0].u32_value = (u32)dtb_win32_map_key(VK_MBUTTON);
 		}break;
-	case WM_XBUTTONDOWN:
+		case WM_XBUTTONDOWN:
 		{
 			int x_button = GET_XBUTTON_WPARAM(wparam);
-
+			
 			if(x_button == 0x001)
 			{
 				dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
@@ -541,36 +541,36 @@ LRESULT CALLBACK win32_procedure(HWND window, UINT message, WPARAM wparam, LPARA
 				e->data[0].u32_value = (u32)dtb_win32_map_key(VK_XBUTTON2);
 			}
 		}break;
-	case WM_KEYUP:
+		case WM_KEYUP:
 		{
 			u32 vk_code = (u32)wparam;
 			int was_down = ((lparam & (1 << 30)) != 0);
 			int is_down = ((lparam & (1 << 31)) == 0);
-
+			
 			int alt_key_down = (lparam & (1 << 29)) != 0;
 			int ctrl_key_down = GetKeyState(VK_CONTROL) != 0;
 			int shift_key_down = GetKeyState(VK_SHIFT) != 0;
 			int caps_lock_key_on = GetKeyState(VK_CAPITAL) != 0;
 			int num_lock_key_on = GetKeyState(VK_NUMLOCK) != 0;
-
+			
 			if(was_down != is_down)
 			{
-
+				
 			}
-
+			
 			if(is_down)
 			{
 				if(vk_code == VK_F4 && alt_key_down)
 				{
 					platform.running = false;
-
+					
 				}
 			}	
-
+			
 			dtb_system_event *e = dtb_queue_event(dtb_system_event_type_key);
 			e->data[0].u32_value = (u32)dtb_win32_map_key((int)wparam);
 			e->data[1].u32_value = is_down;
-
+			
 			if(alt_key_down)
 			{
 				e->data[1].u32_value |= dtb_key_state_alt_key;
@@ -592,27 +592,27 @@ LRESULT CALLBACK win32_procedure(HWND window, UINT message, WPARAM wparam, LPARA
 				e->data[1].u32_value |= dtb_key_state_number_key;
 			}
 		}break;
-	case WM_PAINT:
+		case WM_PAINT:
 		{
 			PAINTSTRUCT paint;
 			HDC deviceContext = BeginPaint(window, &paint);
 			EndPaint(window, &paint);
 		}break;
-	case WM_CHAR:
+		case WM_CHAR:
 		{
 			dtb_system_event *e = dtb_queue_event(dtb_system_event_type_char);
 			e->data[0].u32_value = (u32)wparam;
 		}break;
-	case WM_CLOSE:
+		case WM_CLOSE:
 		{
 			platform.running = false;
 		}break;
-	case WM_QUIT:
+		case WM_QUIT:
 		{
 			platform.running = false;
 			wglDeleteContext(gl_context);
 		}break;
-	case WM_SIZE:
+		case WM_SIZE:
 		{
 			glViewport(0, 0, LOWORD(lparam), HIWORD(lparam));
 			RECT ClientRect;
@@ -621,14 +621,14 @@ LRESULT CALLBACK win32_procedure(HWND window, UINT message, WPARAM wparam, LPARA
 			int height = ClientRect.bottom - ClientRect.top;
 			platform.window_height = height;
 			platform.window_width = width;
-
+			
 			PostMessage(window, WM_PAINT, 0, 0);
 		}break;
-
-	default:
+		
+		default:
 		return DefWindowProc(window, message, wparam, lparam);
 	}
-
+	
 	return DefWindowProc(window, message, wparam, lparam);
 }
 
@@ -637,34 +637,34 @@ bool dtb_platform_init(char* title, int width, int height)
 	platform.window_width = width;
 	platform.window_height = height;
 	platform.window_title = title;
-
+	
 	WNDCLASS wc = {0};
 	wc.hInstance = GetModuleHandle(0);
 	wc.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = win32_procedure;
 	wc.lpszClassName = platform.window_title;
 	RegisterClass(&wc);
-
+	
 	win32_platform.window = CreateWindow(wc.lpszClassName, platform.window_title, 
-		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
-		platform.window_width, platform.window_height,
-		0, 0, wc.hInstance, 0);
-
+										 WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+										 platform.window_width, platform.window_height,
+										 0, 0, wc.hInstance, 0);
+	
 	if(!win32_platform.window)
 	{
 		dtb_platform_log_error("Failed to create win32 window");
 		return false;
 	}
-
+	
 	win32_platform.dc = GetDC(win32_platform.window);
-
+	
 	ShowWindow(win32_platform.window, SW_SHOW);
 	UpdateWindow(win32_platform.window);
-
+	
 	platform.cursorX = 0;
 	platform.cursorY = 0;
 	platform.running = true;
-
+	
 	return true;
 }
 
@@ -678,11 +678,11 @@ void dtb_platform_update()
 		ScreenToClient(win32_platform.window, &win32_platform.p);
 		platform.cursorX = win32_platform.p.x;
 		platform.cursorY = win32_platform.p.y;
-
+		
 		TranslateMessage(&win32_platform.msg);
 		DispatchMessage(&win32_platform.msg);
 	}
-
+	
 	SwapBuffers(win32_platform.dc);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
