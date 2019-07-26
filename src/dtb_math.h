@@ -582,12 +582,38 @@ inline float V3_Dot(v3 left, v3 right)
 	return (Result);
 }
 
+inline m4 Translate(v3 translation){
+	m4 result = M4d(1.0f);
+	
+	result.elements[3][0] = translation.x;
+	result.elements[3][1] = translation.y;
+	result.elements[3][2] = translation.z;
+	
+	return result;
+}
+
 inline m4 Rotate(float angle, v3 axis){
 	m4 result = M4d(1.0f);
 	
 	axis = V3_Normalize(axis);
 	
-	float sin_theta = sin(ToRadians(angle));
+	float sin_theta = sinf(ToRadians(angle));
+	float cos_theta = cosf(ToRadians(angle));
+	float cos_value = 1.0f - cos_theta;
+	
+	result.elements[0][0] = (axis.x * axis.y * cos_value) + cos_theta;
+	result.elements[0][1] = (axis.x * axis.y * cos_value) + (axis.z * sin_theta);
+	result.elements[0][2] = (axis.x * axis.z * cos_value) - (axis.y * sin_theta);
+	
+	result.elements[1][0] = (axis.y * axis.x * cos_value) - (axis.z * sin_theta);
+	result.elements[1][1] = (axis.y * axis.y * cos_value) + cos_theta;
+	result.elements[1][2] = (axis.y * axis.z * cos_value) + (axis.x * sin_theta);
+	
+	result.elements[2][0] = (axis.z * axis.x * cos_value) + (axis.y * sin_theta);
+	result.elements[2][1] = (axis.z * axis.y * cos_value) - (axis.x * sin_theta);
+	result.elements[2][2] = (axis.z * axis.z * cos_value) + cos_theta;
+	
+	return result;
 }
 
 inline m4 Frustum(float right, float left, float top, float bottom, float mFar, float mNear)
@@ -637,9 +663,9 @@ inline m4 Projection(float right, float left, float top, float bottom, float mFa
 
 inline m4 Perspective(float FOV, float AspectRatio, float Near, float Far)
 {
-	m4 Result = {0};
+	m4 Result = M4();
 	
-    float Cotangent = 1.0f / tan(FOV * ( 3.14 / 360.0f));
+    float Cotangent = 1.0f / tanf(FOV * ( 3.14 / 360.0f));
     
     Result.elements[0][0] = Cotangent / AspectRatio;
     Result.elements[1][1] = Cotangent;
