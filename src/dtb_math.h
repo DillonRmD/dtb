@@ -631,18 +631,18 @@ inline m4 Frustum(float right, float left, float top, float bottom, float mFar, 
 	return Result;
 }
 
-inline m4 Orthographic(float right, float left, float top, float bottom, float mFar, float mNear)
+inline m4 Orthographic(float left, float right, float bottom, float top, float mNear, float mFar)
 {
 	m4 Result = {0};
 	
-	Result.elements[0][0] = (2 / (right - left));
-	Result.elements[0][3] = -((right + left) / (right - left));
-	Result.elements[1][1] = (2 / (top - bottom));
-	Result.elements[1][3] = -((top + bottom) / (top - bottom));
-	Result.elements[2][2] = (-2 / (mFar - mNear));
-	Result.elements[2][3] = -((mFar + mNear) / (mFar - mNear));
-	Result.elements[3][3] = 1;
+	Result.elements[0][0] = 2.0f / (right - left);
+    Result.elements[1][1] = 2.0f / (top - bottom);
+    Result.elements[2][2] = 2.0f / (mNear - mFar);
+    Result.elements[3][3] = 1.0f;
 	
+    Result.elements[3][0] = (left + right) / (left - right);
+    Result.elements[3][1] = (bottom + top) / (bottom - top);
+    Result.elements[3][2] = (mFar + mNear) / (mNear - mFar);
 	return Result;
 }
 
