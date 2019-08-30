@@ -1,18 +1,17 @@
 TODO:
 
-dtb.h:
-* Deprecate dtb.h, end it's development cycle and scrap it. 
+IMPORTANT:
+* Make sure everything works cleanly with pure C, this is mainly the issue in dtb_platform.h
 
 dtb_gl.h:
+* Fix Shaders issues, they are pretty terrible right now
 * Write a function for texture bindings
 * Add opengl address grabbers for linux and mac
-* 
 
 dtb_platform.h:
 * Performance checker
 * Find a way to remove global struct platform
+* Find a better way to detect key strokes or presses
 
 dtb_math.h:
-* Implement a distance finder function
-* Expand the vector math sets
-* Implement slope intercept y = mx + b;
+* Fix warnings about possible data loss
