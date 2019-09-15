@@ -216,7 +216,7 @@ typedef struct
 	
 	int window_width;
 	int window_height;
-	char* window_title;
+	const char* window_title;
 	bool running;
 	int cursorX;
 	int cursorY;
@@ -233,9 +233,9 @@ typedef struct
 dtb_platform platform = {0};
 dtb_win32 win32_platform = {0};
 
-void dtb_platform_log_error(char* msg, ...)
+void dtb_platform_log_error(const char* msg, ...)
 {
-	const size_t BUFFER_SIZE = 16384;
+	#define BUFFER_SIZE 16384
 	char buffer[BUFFER_SIZE];
 	va_list args;
 	va_start(args, msg);
@@ -254,7 +254,7 @@ dtb_system_event *dtb_queue_event(dtb_system_event_type type)
 	}
 	else
 	{
-		dtb_platform_log_error("SysEvent Queue overflow");
+		dtb_platform_log_error("(SysEvent Queue overflow)");
 	}
 	ev->type = type;
 	ev->ptr_size = 0;
@@ -632,7 +632,7 @@ LRESULT CALLBACK win32_procedure(HWND window, UINT message, WPARAM wparam, LPARA
 	return DefWindowProc(window, message, wparam, lparam);
 }
 
-bool dtb_platform_init(char* title, int width, int height)
+bool dtb_platform_init(const char* title, int width, int height)
 {
 	platform.window_width = width;
 	platform.window_height = height;
