@@ -716,14 +716,6 @@ inline v2 Cross2f(v2 vec)
 	return result;
 }
 
-inline float RandomFloat(float a, float b)
-{
-	float random = ((float)rand()) / (float)RAND_MAX;
-	float diff = b - a;
-	float r = random * diff;
-	return a + r;
-}
-
 inline float Distancef(float x1, float y1, float x2, float y2)
 {
 	return Sqrt(powf(x2 - x1, 2) + powf(y2 - y1, 2));

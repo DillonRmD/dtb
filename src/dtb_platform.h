@@ -1,7 +1,7 @@
 /* ============================================================================================
 * PROJECT:  Dillon's Tool Box Platform Edition
 * AUTHOR:   Dillon Williams
-* LICENSE:  Do What The Fuck Ever license
+* LICENSE:  I don't care license
 * LANGUAGE: C\C++
 *
 * 
@@ -11,7 +11,7 @@
 * 
 * IMPORTANT
 * OpenGL is required to run. Also every call the end user makes should run through an already defined struct call dtb_platform.
-* I have named it "platform". So to use in a scenario it would like " int new_width = platform.window_width; "
+* I have named it "platform". So to use in a scenario it would look like " int new_width = platform.window_width; "
 * 
 * Your main compilation file should look similiar to this:
 * -------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 {
 dtb_platform_init("Window Title", 800, 600);
 
-while(platform.running)
+while(dtb_platform_is_running())
 {
 dtb_platform_update();
 
@@ -666,6 +666,11 @@ bool dtb_platform_init(char* title, int width, int height)
 	platform.running = true;
 	
 	return true;
+}
+
+bool dtb_platform_is_running()
+{
+	return platform.running;
 }
 
 void dtb_platform_update()
