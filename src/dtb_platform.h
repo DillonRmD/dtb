@@ -1,7 +1,7 @@
 /* ============================================================================================
 * PROJECT:  Dillon's Tool Box Platform Edition
 * AUTHOR:   Dillon Williams
-* LICENSE:  Do What The Fuck Ever license
+* LICENSE:  I don't care license
 * LANGUAGE: C\C++
 *
 * 
@@ -11,7 +11,7 @@
 * 
 * IMPORTANT
 * OpenGL is required to run. Also every call the end user makes should run through an already defined struct call dtb_platform.
-* I have named it "platform". So to use in a scenario it would like " int new_width = platform.window_width; "
+* I have named it "platform". So to use in a scenario it would look like " int new_width = platform.window_width; "
 * 
 * Your main compilation file should look similiar to this:
 * -------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 {
 dtb_platform_init("Window Title", 800, 600);
 
-while(platform.running)
+while(dtb_platform_is_running())
 {
 dtb_platform_update();
 
@@ -216,10 +216,10 @@ typedef struct
 	
 	int window_width;
 	int window_height;
-	char* window_title;
+	const char* window_title;
 	bool running;
-	int cursorX;
-	int cursorY;
+	int cursor_x;
+	int cursor_y;
 }dtb_platform;
 
 typedef struct
@@ -233,9 +233,9 @@ typedef struct
 dtb_platform platform = {0};
 dtb_win32 win32_platform = {0};
 
-void dtb_platform_log_error(char* msg, ...)
+void dtb_platform_log_error(const char* msg, ...)
 {
-	const size_t BUFFER_SIZE = 16384;
+	#define BUFFER_SIZE 16384
 	char buffer[BUFFER_SIZE];
 	va_list args;
 	va_start(args, msg);
@@ -254,7 +254,7 @@ dtb_system_event *dtb_queue_event(dtb_system_event_type type)
 	}
 	else
 	{
-		dtb_platform_log_error("SysEvent Queue overflow");
+		dtb_platform_log_error("(SysEvent Queue overflow)");
 	}
 	ev->type = type;
 	ev->ptr_size = 0;
@@ -632,7 +632,7 @@ LRESULT CALLBACK win32_procedure(HWND window, UINT message, WPARAM wparam, LPARA
 	return DefWindowProc(window, message, wparam, lparam);
 }
 
-bool dtb_platform_init(char* title, int width, int height)
+bool dtb_platform_init(const char* title, int width, int height)
 {
 	platform.window_width = width;
 	platform.window_height = height;
@@ -661,11 +661,16 @@ bool dtb_platform_init(char* title, int width, int height)
 	ShowWindow(win32_platform.window, SW_SHOW);
 	UpdateWindow(win32_platform.window);
 	
-	platform.cursorX = 0;
-	platform.cursorY = 0;
+	platform.cursor_x = 0;
+	platform.cursor_y = 0;
 	platform.running = true;
 	
 	return true;
+}
+
+bool dtb_platform_is_running()
+{
+	return platform.running;
 }
 
 void dtb_platform_update()
@@ -676,8 +681,8 @@ void dtb_platform_update()
 	{
 		GetCursorPos(&win32_platform.p);
 		ScreenToClient(win32_platform.window, &win32_platform.p);
-		platform.cursorX = win32_platform.p.x;
-		platform.cursorY = win32_platform.p.y;
+		platform.cursor_x = win32_platform.p.x;
+		platform.cursor_y = win32_platform.p.y;
 		
 		TranslateMessage(&win32_platform.msg);
 		DispatchMessage(&win32_platform.msg);
