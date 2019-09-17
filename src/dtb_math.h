@@ -482,6 +482,26 @@ inline v2 operator/(v2 left, v2 right){
 	return V2_Divide(left, right);
 }
 
+inline v2 operator+(v2 left, float right)
+{
+	return V2_Addf(left, right);
+}
+
+inline v2 operator-(v2 left, float right)
+{
+	return V2_Subtractf(left, right);
+}
+
+inline v2 operator*(v2 left, float right)
+{
+	return V2_Multiplyf(left, right);
+}
+
+inline v2 operator/(v2 left, float right)
+{
+	return V2_Dividef(left, right);
+}
+
 inline v3 operator+(v3 left, v3 right){
 	return V3_Add(left, right);
 }
@@ -498,6 +518,26 @@ inline v3 operator/(v3 left, v3 right){
 	return V3_Divide(left, right);
 }
 
+inline v3 operator+(v3 left, float right)
+{
+	return V3_Addf(left, right);
+}
+
+inline v3 operator-(v3 left, float right)
+{
+	return V3_Subtractf(left, right);
+}
+
+inline v3 operator*(v3 left, float right)
+{
+	return V3_Multiplyf(left, right);
+}
+
+inline v3 operator/(v3 left, float right)
+{
+	return V3_Dividef(left, right);
+}
+
 inline v4 operator+(v4 left, v4 right){
 	return V4_Add(left, right);
 }
@@ -512,6 +552,26 @@ inline v4 operator*(v4 left, v4 right){
 
 inline v4 operator/(v4 left, v4 right){
 	return V4_Divide(left, right);
+}
+
+inline v4 operator+(v4 left, float right)
+{
+	return V4_Addf(left, right);
+}
+
+inline v4 operator-(v4 left, float right)
+{
+	return V4_Subtractf(left, right);
+}
+
+inline v4 operator*(v4 left, float right)
+{
+	return V4_Multiplyf(left, right);
+}
+
+inline v4 operator/(v4 left, float right)
+{
+	return V4_Dividef(left, right);
 }
 
 inline m4 operator+(m4 left, m4 right){
