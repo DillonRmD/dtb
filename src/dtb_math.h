@@ -15,20 +15,17 @@
 */
 
 #if !defined DTB_MATH_H
-
-#include <math.h>
-
 #define PI 3.14159265358979323846
 #define PI32 3.14159265359f
 #define TWO_PI PI * 2
 
-#define MIN(a, b) a > b ? b : a
-#define MAX(a, b) a < b ? b : a
-#define ABS(a) (a > 0 ? a : -(a))
-#define MOD(a, m) ((a) % (m)) >= 0 ? ((a) % (m)) : (((a) % (m)) + (m))
-#define SQUARE(x) x * x
+#define DTB_MIN(a, b) a > b ? b : a
+#define DTB_MAX(a, b) a < b ? b : a
+#define DTB_ABS(a) (a > 0 ? a : -(a))
+#define DTB_MOD(a, m) ((a) % (m)) >= 0 ? ((a) % (m)) : (((a) % (m)) + (m))
+#define DTB_SQUARE(x) x * x
 
-typedef union v2
+typedef union dtbV2
 {
 	struct
 	{
@@ -52,9 +49,9 @@ typedef union v2
 	
 	float elements[2];
 	
-}v2;
+}dtbV2;
 
-typedef union v3
+typedef union dtbV3
 {
 	struct
 	{
@@ -73,9 +70,9 @@ typedef union v3
 	
 	float elements[3];
 	
-}v3;
+}dtbV3;
 
-typedef union v4
+typedef union dtbV4
 {
 	struct
 	{
@@ -89,17 +86,24 @@ typedef union v4
 	
 	float elements[4];
 	
-}v4;
+}dtbV4;
 
-typedef struct circle
+typedef struct dtbCircle
 {
 	float radius, x, y;
-}circle;
+}dtbCircle;
 
-typedef struct m4
+typedef struct dtbM4
 {
 	float elements[4][4];
-}m4;
+}dtbM4;
+
+#if defined(DTB_MATH_USE_TYPES)
+typedef dtbV2 v2;
+typedef dtbV3 v3;
+typedef dtbV4 v4;
+typedef dtbM4 m4;
+#endif
 
 
 // NOTE(DILLON): Strictly utitily functions outside of math structures
@@ -126,81 +130,81 @@ float Clamp(float min, float value, float max){
 }
 
 // NOTE(DILLON): Vector 2's
-v2 V2(float x, float y)
+dtbV2 dtbVec2(float x, float y)
 {
-	v2 result = {0};
+	dtbV2 result = {0};
 	result.x = x;
 	result.y = y;
 	return result;
 }
 
-v2 V2z()
+dtbV2 dtbVec2z()
 {
-	v2 result = {0};
+	dtbV2 result = {0};
 	return result;
 }
 
-v2 V2_Add(v2 left, v2 right)
+dtbV2 dtbVec2_Add(dtbV2 left, dtbV2 right)
 {
-	v2 result = {0};
+	dtbV2 result = {0};
 	result.x = left.x + right.x;
 	result.y = left.y + right.y;
 	return result;
 }
 
-v2 V2_Addf(v2 left, float right)
+dtbV2 dtbVec2_Addf(dtbV2 left, float right)
 {
-	v2 result = {0};
+	dtbV2 result = {0};
 	result.x = left.x + right;
 	result.y = left.y + right;
 	return result;
 }
 
 
-v2 V2_Subtract(v2 left, v2 right)
+dtbV2 dtbVec2_Subtract(dtbV2 left, dtbV2 right)
 {
-	v2 result = {0};
+	dtbV2 result = {0};
 	result.x = left.x - right.x;
 	result.y = left.y - right.y;
 	return result;
 }
 
-v2 V2_Subtractf(v2 left, float right)
+dtbV2 dtbVec2_Subtractf(dtbV2 left, float right)
 {
-	v2 result = {0};
+	dtbV2 result = {0};
 	result.x = left.x - right;
 	result.y = left.y - right;
 	return result;
 }
 
-v2 V2_Multiply(v2 left, v2 right)
+dtbV2 dtbVec2_Multiply(dtbV2 left, dtbV2 right)
 {
-	v2 result = {0};
+	dtbV2 result = {0};
 	result.x = left.x * right.x;
 	result.y = left.y * right.y;
 	return result;
 }
 
-v2 V2_Multiplyf(v2 left, float right)
+dtbV2 dtbVec2_Multiplyf(dtbV2 left, float right)
 {
-	v2 result = {0};
+	dtbV2 result = {0};
 	result.x = left.x * right;
 	result.y = left.y * right;
 	return result;
 }
 
 
-v2 V2_Divide(v2 left, v2 right)
+dtbV2 dtbVec2_Divide(dtbV2 left, dtbV2 right)
 {
-	v2 result = {0};
+	dtbV2 result = {0};
 	result.x = left.x / right.x;
 	result.y = left.y / right.y;
 	return result;
 }
 
-v2 V2_Dividef(v2 left, float right)
+dtbV2 dtbVec2_Dividef(dtbV2 left, float right)
 {
-	v2 result = {0};
+	dtbV2 result = {0};
 	result.x = left.x / right;
 	result.y = left.y / right;
 	return result;
@@ -208,87 +212,87 @@ v2 V2_Dividef(v2 left, float right)
 
 
 // NOTE(DILLON): Vector 3's
-v3 V3(float x, float y, float z)
+dtbV3 dtbVec3(float x, float y, float z)
 {
-	v3 result = {0};
+	dtbV3 result = {0};
 	result.x = x;
 	result.y = y;
 	result.z = z;
 	return result;
 }
 
-v3 V3z()
+dtbV3 dtbVec3z()
 {
-	v3 result = {0};
+	dtbV3 result = {0};
 	return result;
 }
 
-v3 V3_Add(v3 left, v3 right)
+dtbV3 dtbVec3_Add(dtbV3 left, dtbV3 right)
 {
-	v3 result = {0};
+	dtbV3 result = {0};
 	result.x = left.x + right.x;
 	result.x = left.y + right.y;
 	result.x = left.z + right.z;
 	return result;
 }
 
-v3 V3_Addf(v3 left, float right)
+dtbV3 dtbVec3_Addf(dtbV3 left, float right)
 {
-	v3 result = {0};
+	dtbV3 result = {0};
 	result.x = left.x + right;
 	result.x = left.y + right;
 	result.x = left.z + right;
 	return result;
 }
 
-v3 V3_Subtract(v3 left, v3 right)
+dtbV3 dtbVec3_Subtract(dtbV3 left, dtbV3 right)
 {
-	v3 result = {0};
+	dtbV3 result = {0};
 	result.x = left.x - right.x;
 	result.x = left.y - right.y;
 	result.x = left.z - right.z;
 	return result;
 }
 
-v3 V3_Subtractf(v3 left, float right)
+dtbV3 dtbVec3_Subtractf(dtbV3 left, float right)
 {
-	v3 result = {0};
+	dtbV3 result = {0};
 	result.x = left.x - right;
 	result.x = left.y - right;
 	result.x = left.z - right;
 	return result;
 }
 
-v3 V3_Multiply(v3 left, v3 right)
+dtbV3 dtbVec3_Multiply(dtbV3 left, dtbV3 right)
 {
-	v3 result = {0};
+	dtbV3 result = {0};
 	result.x = left.x * right.x;
 	result.x = left.y * right.y;
 	result.x = left.z * right.z;
 	return result;
 }
 
-v3 V3_Multiplyf(v3 left, float right)
+dtbV3 dtbVec3_Multiplyf(dtbV3 left, float right)
 {
-	v3 result = {0};
+	dtbV3 result = {0};
 	result.x = left.x * right;
 	result.x = left.y * right;
 	result.x = left.z * right;
 	return result;
 }
 
-v3 V3_Divide(v3 left, v3 right)
+dtbV3 dtbVec3_Divide(dtbV3 left, dtbV3 right)
 {
-	v3 result = {0};
+	dtbV3 result = {0};
 	result.x = left.x / right.x;
 	result.x = left.y / right.y;
 	result.x = left.z / right.z;
 	return result;
 }
 
-v3 V3_Dividef(v3 left, float right)
+dtbV3 dtbVec3_Dividef(dtbV3 left, float right)
 {
-	v3 result = {0};
+	dtbV3 result = {0};
 	result.x = left.x / right;
 	result.x = left.y / right;
 	result.x = left.z / right;
@@ -296,9 +300,9 @@ v3 V3_Dividef(v3 left, float right)
 }
 
 // NOTE(DILLON): Vector 4's
-v4 V4(float x, float y, float z, float w)
+dtbV4 dtbVec4(float x, float y, float z, float w)
 {
-	v4 result = {0};
+	dtbV4 result = {0};
 	result.x = x;
 	result.y = y;
 	result.z = z;
@@ -306,15 +310,15 @@ v4 V4(float x, float y, float z, float w)
 	return result;
 }
 
-v4 V4z()
+dtbV4 dtbVec4z()
 {
-	v4 result = {0};
+	dtbV4 result = {0};
 	return result;
 }
 
-v4 V4_Add(v4 left, v4 right)
+dtbV4 dtbVec4_Add(dtbV4 left, dtbV4 right)
 {
-	v4 result = {0};
+	dtbV4 result = {0};
 	result.x = left.x + right.x;
 	result.y = left.y + right.y;
 	result.z = left.z + right.z;
@@ -322,9 +326,9 @@ v4 V4_Add(v4 left, v4 right)
 	return result;
 }
 
-v4 V4_Addf(v4 left, float right)
+dtbV4 dtbVec4_Addf(dtbV4 left, float right)
 {
-	v4 result = {0};
+	dtbV4 result = {0};
 	result.x = left.x + right;
 	result.y = left.y + right;
 	result.z = left.z + right;
@@ -332,9 +336,9 @@ v4 V4_Addf(v4 left, float right)
 	return result;
 }
 
-v4 V4_Subtract(v4 left, v4 right)
+dtbV4 dtbVec4_Subtract(dtbV4 left, dtbV4 right)
 {
-	v4 result = {0};
+	dtbV4 result = {0};
 	result.x = left.x - right.x;
 	result.y = left.y - right.y;
 	result.z = left.z - right.z;
@@ -342,9 +346,9 @@ v4 V4_Subtract(v4 left, v4 right)
 	return result;
 }
 
-v4 V4_Subtractf(v4 left, float right)
+dtbV4 dtbVec4_Subtractf(dtbV4 left, float right)
 {
-	v4 result = {0};
+	dtbV4 result = {0};
 	result.x = left.x - right;
 	result.y = left.y - right;
 	result.z = left.z - right;
@@ -352,9 +356,9 @@ v4 V4_Subtractf(v4 left, float right)
 	return result;
 }
 
-v4 V4_Multiply(v4 left, v4 right)
+dtbV4 dtbVec4_Multiply(dtbV4 left, dtbV4 right)
 {
-	v4 result = {0};
+	dtbV4 result = {0};
 	result.x = left.x * right.x;
 	result.y = left.y * right.y;
 	result.z = left.z * right.z;
@@ -362,9 +366,9 @@ v4 V4_Multiply(v4 left, v4 right)
 	return result;
 }
 
-v4 V4_Multiplyf(v4 left, float right)
+dtbV4 dtbVec4_Multiplyf(dtbV4 left, float right)
 {
-	v4 result = {0};
+	dtbV4 result = {0};
 	result.x = left.x * right;
 	result.y = left.y * right;
 	result.z = left.z * right;
@@ -372,9 +376,9 @@ v4 V4_Multiplyf(v4 left, float right)
 	return result;
 }
 
-v4 V4_Divide(v4 left, v4 right)
+dtbV4 dtbVec4_Divide(dtbV4 left, dtbV4 right)
 {
-	v4 result = {0};
+	dtbV4 result = {0};
 	result.x = left.x / right.x;
 	result.y = left.y / right.y;
 	result.z = left.z / right.z;
@@ -382,9 +386,9 @@ v4 V4_Divide(v4 left, v4 right)
 	return result;
 }
 
-v4 V4_Dividef(v4 left, float right)
+dtbV4 dtbVec4_Dividef(dtbV4 left, float right)
 {
-	v4 result = {0};
+	dtbV4 result = {0};
 	result.x = left.x / right;
 	result.y = left.y / right;
 	result.z = left.z / right;
@@ -394,13 +398,13 @@ v4 V4_Dividef(v4 left, float right)
 
 // NOTE(DILLON): Matrix4x4
 
-m4 M4(){
-	m4 result = {0};
+dtbM4 dtbMat4(){
+	dtbM4 result = {0};
 	return result;
 }
 
-m4 M4d(float diagonal){
-	m4 result = M4();
+dtbM4 dtbMat4d(float diagonal){
+	dtbM4 result = dtbMat4();
 	
 	result.elements[0][0] = diagonal;
 	result.elements[1][1] = diagonal;
@@ -409,8 +413,8 @@ m4 M4d(float diagonal){
 	return result;
 }
 
-m4 M4_Add(m4 left, m4 right){
-	m4 result;
+dtbM4 dtbMat4_Add(dtbM4 left, dtbM4 right){
+	dtbM4 result;
 	
 	for(int columns = 0; columns < 4; columns++){
 		for(int rows = 0; rows < 4; rows++){
@@ -422,8 +426,8 @@ m4 M4_Add(m4 left, m4 right){
 }
 
 
-m4 M4_Subtract(m4 left, m4 right){
-	m4 result;
+dtbM4 dtbMat4_Subtract(dtbM4 left, dtbM4 right){
+	dtbM4 result;
 	
 	for(int columns = 0; columns < 4; columns++){
 		for(int rows = 0; rows < 4; rows++){
@@ -434,8 +438,8 @@ m4 M4_Subtract(m4 left, m4 right){
 	return result;
 }
 
-m4 M4_Multiply(m4 left, m4 right){
-	m4 result;
+dtbM4 dtbMat4_Multiply(dtbM4 left, dtbM4 right){
+	dtbM4 result;
 	
 	for(int columns = 0; columns < 4; columns++){
 		for(int rows = 0; rows < 4; rows++){
@@ -451,8 +455,8 @@ m4 M4_Multiply(m4 left, m4 right){
 	return result;
 }
 
-m4 M4_Dividef(m4 matrix, float scalar){
-	m4 result;
+dtbM4 dtbMat4_Dividef(dtbM4 matrix, float scalar){
+	dtbM4 result;
 	
 	for(int columns = 0; columns < 4; columns++){
 		for(int rows = 0; rows < 4; rows++){
@@ -466,133 +470,133 @@ m4 M4_Dividef(m4 matrix, float scalar){
 
 #ifdef __cplusplus
 
-v2 operator+(v2 left, v2 right){
-	return V2_Add(left, right);
+dtbV2 operator+(dtbV2 left, dtbV2 right){
+	return dtbVec2_Add(left, right);
 }
 
-v2 operator-(v2 left, v2 right){
-	return V2_Subtract(left, right);
+dtbV2 operator-(dtbV2 left, dtbV2 right){
+	return dtbVec2_Subtract(left, right);
 }
 
-v2 operator*(v2 left, v2 right){
-	return V2_Multiply(left, right);
+dtbV2 operator*(dtbV2 left, dtbV2 right){
+	return dtbVec2_Multiply(left, right);
 }
 
-v2 operator/(v2 left, v2 right){
-	return V2_Divide(left, right);
+dtbV2 operator/(dtbV2 left, dtbV2 right){
+	return dtbVec2_Divide(left, right);
 }
 
-v2 operator+(v2 left, float right)
+dtbV2 operator+(dtbV2 left, float right)
 {
-	return V2_Addf(left, right);
+	return dtbVec2_Addf(left, right);
 }
 
-v2 operator-(v2 left, float right)
+dtbV2 operator-(dtbV2 left, float right)
 {
-	return V2_Subtractf(left, right);
+	return dtbVec2_Subtractf(left, right);
 }
 
-v2 operator*(v2 left, float right)
+dtbV2 operator*(dtbV2 left, float right)
 {
-	return V2_Multiplyf(left, right);
+	return dtbVec2_Multiplyf(left, right);
 }
 
-v2 operator/(v2 left, float right)
+dtbV2 operator/(dtbV2 left, float right)
 {
-	return V2_Dividef(left, right);
+	return dtbVec2_Dividef(left, right);
 }
 
-v3 operator+(v3 left, v3 right){
-	return V3_Add(left, right);
+dtbV3 operator+(dtbV3 left, dtbV3 right){
+	return dtbVec3_Add(left, right);
 }
 
-v3 operator-(v3 left, v3 right){
-	return V3_Subtract(left, right);
+dtbV3 operator-(dtbV3 left, dtbV3 right){
+	return dtbVec3_Subtract(left, right);
 }
 
-v3 operator*(v3 left, v3 right){
-	return V3_Multiply(left, right);
+dtbV3 operator*(dtbV3 left, dtbV3 right){
+	return dtbVec3_Multiply(left, right);
 }
 
-v3 operator/(v3 left, v3 right){
-	return V3_Divide(left, right);
+dtbV3 operator/(dtbV3 left, dtbV3 right){
+	return dtbVec3_Divide(left, right);
 }
 
-v3 operator+(v3 left, float right)
+dtbV3 operator+(dtbV3 left, float right)
 {
-	return V3_Addf(left, right);
+	return dtbVec3_Addf(left, right);
 }
 
-v3 operator-(v3 left, float right)
+dtbV3 operator-(dtbV3 left, float right)
 {
-	return V3_Subtractf(left, right);
+	return dtbVec3_Subtractf(left, right);
 }
 
-v3 operator*(v3 left, float right)
+dtbV3 operator*(dtbV3 left, float right)
 {
-	return V3_Multiplyf(left, right);
+	return dtbVec3_Multiplyf(left, right);
 }
 
-v3 operator/(v3 left, float right)
+dtbV3 operator/(dtbV3 left, float right)
 {
-	return V3_Dividef(left, right);
+	return dtbVec3_Dividef(left, right);
 }
 
-v4 operator+(v4 left, v4 right){
-	return V4_Add(left, right);
+dtbV4 operator+(dtbV4 left, dtbV4 right){
+	return dtbVec4_Add(left, right);
 }
 
-v4 operator-(v4 left, v4 right){
-	return V4_Subtract(left, right);
+dtbV4 operator-(dtbV4 left, dtbV4 right){
+	return dtbVec4_Subtract(left, right);
 }
 
-v4 operator*(v4 left, v4 right){
-	return V4_Multiply(left, right);
+dtbV4 operator*(dtbV4 left, dtbV4 right){
+	return dtbVec4_Multiply(left, right);
 }
 
-v4 operator/(v4 left, v4 right){
-	return V4_Divide(left, right);
+dtbV4 operator/(dtbV4 left, dtbV4 right){
+	return dtbVec4_Divide(left, right);
 }
 
-v4 operator+(v4 left, float right)
+dtbV4 operator+(dtbV4 left, float right)
 {
-	return V4_Addf(left, right);
+	return dtbVec4_Addf(left, right);
 }
 
-v4 operator-(v4 left, float right)
+dtbV4 operator-(dtbV4 left, float right)
 {
-	return V4_Subtractf(left, right);
+	return dtbVec4_Subtractf(left, right);
 }
 
-v4 operator*(v4 left, float right)
+dtbV4 operator*(dtbV4 left, float right)
 {
-	return V4_Multiplyf(left, right);
+	return dtbVec4_Multiplyf(left, right);
 }
 
-v4 operator/(v4 left, float right)
+dtbV4 operator/(dtbV4 left, float right)
 {
-	return V4_Dividef(left, right);
+	return dtbVec4_Dividef(left, right);
 }
 
-m4 operator+(m4 left, m4 right){
-	return M4_Add(left, right);
+dtbM4 operator+(dtbM4 left, dtbM4 right){
+	return dtbMat4_Add(left, right);
 }
 
-m4 operator-(m4 left, m4 right){
-	return M4_Subtract(left, right);
+dtbM4 operator-(dtbM4 left, dtbM4 right){
+	return dtbMat4_Subtract(left, right);
 }
 
-m4 operator*(m4 left, m4 right){
-	return M4_Multiply(left, right);
+dtbM4 operator*(dtbM4 left, dtbM4 right){
+	return dtbMat4_Multiply(left, right);
 }
 
-m4 operator/(m4 left, float scalar){
-	return M4_Dividef(left, scalar);
+dtbM4 operator/(dtbM4 left, float scalar){
+	return dtbMat4_Dividef(left, scalar);
 }
 
 #endif
 
-float Sqrt(float number)
+float dtbSqrt(float number)
 {
 	int i;
 	float x, y;
@@ -607,12 +611,12 @@ float Sqrt(float number)
 }
 
 //TODO(dillon): This isn't very effiecent fix this later
-v3 V3_Normalize(v3 vec)
+dtbV3 dtbVec3_Normalize(dtbV3 vec)
 {
-	v3 Result = { 0 };
+	dtbV3 Result = { 0 };
 	
 	float f;
-	f = Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	f = dtbSqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 	vec.x /= f;
 	vec.y /= f;
 	vec.z /= f;
@@ -624,9 +628,9 @@ v3 V3_Normalize(v3 vec)
 	return Result;
 }
 
-v3 V3_Cross(v3 left, v3 right)
+dtbV3 dtbVec3_Cross(dtbV3 left, dtbV3 right)
 {
-	v3 Result;
+	dtbV3 Result;
 	
 	Result.x = (left.y * right.z) - (left.z * right.y);
 	Result.y = (left.z * right.x) - (left.x * right.z);
@@ -635,15 +639,15 @@ v3 V3_Cross(v3 left, v3 right)
 	return (Result);
 }
 
-float V3_Dot(v3 left, v3 right)
+float dtbVec3_Dot(dtbV3 left, dtbV3 right)
 {
 	float Result = (left.x * right.x) + (left.y * right.y) + (left.z * right.z);
 	
 	return (Result);
 }
 
-m4 Translate(v3 translation){
-	m4 result = M4d(1.0f);
+dtbM4 dtbTranslate(dtbV3 translation){
+	dtbM4 result = dtbMat4d(1.0f);
 	
 	result.elements[3][0] = translation.x;
 	result.elements[3][1] = translation.y;
@@ -651,11 +655,12 @@ m4 Translate(v3 translation){
 	
 	return result;
 }
-
-m4 Rotate(float angle, v3 axis){
-	m4 result = M4d(1.0f);
+//IMPORTANT(dillon): NEED TO REMOVE THIS, NO HEADER FILE DEPENDENCY
+#include <math.h>
+dtbM4 dtbRotate(float angle, dtbV3 axis){
+	dtbM4 result = dtbMat4d(1.0f);
 	
-	axis = V3_Normalize(axis);
+	axis = dtbVec3_Normalize(axis);
 	
 	float sin_theta = sinf(ToRadians(angle));
 	float cos_theta = cosf(ToRadians(angle));
@@ -676,9 +681,9 @@ m4 Rotate(float angle, v3 axis){
 	return result;
 }
 
-m4 Frustum(float right, float left, float top, float bottom, float mFar, float mNear)
+dtbM4 dtbFrustum(float right, float left, float top, float bottom, float mFar, float mNear)
 {
-	m4 Result = {0};
+	dtbM4 Result = {0};
 	
 	Result.elements[0][0] = 2 * mNear / (right - left);
 	Result.elements[1][1] = 2 * mNear / (top - bottom);
@@ -691,9 +696,9 @@ m4 Frustum(float right, float left, float top, float bottom, float mFar, float m
 	return Result;
 }
 
-m4 Orthographic(float left, float right, float bottom, float top, float mNear, float mFar)
+dtbM4 dtbOrthographic(float left, float right, float bottom, float top, float mNear, float mFar)
 {
-	m4 Result = {0};
+	dtbM4 Result = {0};
 	
 	Result.elements[0][0] = 2.0f / (right - left);
     Result.elements[1][1] = 2.0f / (top - bottom);
@@ -706,9 +711,9 @@ m4 Orthographic(float left, float right, float bottom, float top, float mNear, f
 	return Result;
 }
 
-m4 Projection(float right, float left, float top, float bottom, float mFar, float mNear)
+dtbM4 dtbProjection(float right, float left, float top, float bottom, float mFar, float mNear)
 {
-	m4 Result = {0};
+	dtbM4 Result = {0};
 	
 	Result.elements[0][0] = 2 / (right - left);
 	Result.elements[0][3] = -((right + left) / (right - left));
@@ -721,9 +726,9 @@ m4 Projection(float right, float left, float top, float bottom, float mFar, floa
 	return Result;
 }
 
-m4 Perspective(float FOV, float AspectRatio, float Near, float Far)
+dtbM4 dtbPerspective(float FOV, float AspectRatio, float Near, float Far)
 {
-	m4 Result = M4();
+	dtbM4 Result = dtbMat4();
 	
     float Cotangent = 1.0f / tanf(FOV * ( 3.14 / 360.0f));
     
@@ -737,13 +742,13 @@ m4 Perspective(float FOV, float AspectRatio, float Near, float Far)
     return (Result);
 }
 
-m4 LookAt(v3 Eye, v3 Center, v3 Up)
+dtbM4 dtbLookAt(dtbV3 Eye, dtbV3 Center, dtbV3 Up)
 {
-	m4 Result;
+	dtbM4 Result;
 	
-	v3 F = V3_Normalize(V3_Subtract(Center, Eye));
-	v3 S = V3_Normalize(V3_Cross(F, Up));
-	v3 U = V3_Cross(S, F);
+	dtbV3 F = dtbVec3_Normalize(dtbVec3_Subtract(Center, Eye));
+	dtbV3 S = dtbVec3_Normalize(dtbVec3_Cross(F, Up));
+	dtbV3 U = dtbVec3_Cross(S, F);
 	
 	Result.elements[0][0] = S.x;
 	Result.elements[0][1] = U.x;
@@ -760,64 +765,64 @@ m4 LookAt(v3 Eye, v3 Center, v3 Up)
 	Result.elements[2][2] = -F.z;
 	Result.elements[2][3] = 0.0f;
 	
-	Result.elements[3][0] = -V3_Dot(S, Eye);
-	Result.elements[3][1] = -V3_Dot(U, Eye);
-	Result.elements[3][2] = V3_Dot(F, Eye);
+	Result.elements[3][0] = -dtbVec3_Dot(S, Eye);
+	Result.elements[3][1] = -dtbVec3_Dot(U, Eye);
+	Result.elements[3][2] = dtbVec3_Dot(F, Eye);
 	Result.elements[3][3] = 1.0f;
 	
 	return (Result);
 }
 
-v2 Cross2f(v2 vec) 
+dtbV2 dtbCross2f(dtbV2 vec) 
 {
-	v2 result = {0};
+	dtbV2 result = {0};
 	result.x = vec.y;
 	result.y = -vec.x;
 	return result;
 }
 
-float Distancef(float x1, float y1, float x2, float y2)
+float dtbDistancef(float x1, float y1, float x2, float y2)
 {
-	return Sqrt(powf(x2 - x1, 2) + powf(y2 - y1, 2));
+	return dtbSqrt(powf(x2 - x1, 2) + powf(y2 - y1, 2));
 }
 
-float Distancev(v2 left, v2 right)
+float dtbDistancev(dtbV2 left, dtbV2 right)
 {
-	return Sqrt(powf(right.x - left.x, 2) + powf(right.y - left.y, 2));
+	return dtbSqrt(powf(right.x - left.x, 2) + powf(right.y - left.y, 2));
 }
 
-float V2_Length(v2 vec)
+float dtbVec2_Length(dtbV2 vec)
 {
-	return Sqrt(vec.x * vec.x + vec.y * vec.y);
+	return dtbSqrt(vec.x * vec.x + vec.y * vec.y);
 }
 
-float V3_Length(v3 vec)
+float dtbVec3_Length(dtbV3 vec)
 {
-	return Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	return dtbSqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
 
-float V4_Length(v4 vec)
+float dtbVec4_Length(dtbV4 vec)
 {
-	return Sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
+	return dtbSqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
 }
 
-void V2_SetAngle(v2 vec, float angle)
+void dtbV2_SetAngle(dtbV2 vec, float angle)
 {
-	float length = V2_Length(vec);
+	float length = dtbVec2_Length(vec);
 	
 	vec.x = cos(angle) * length;
 	vec.y = sin(angle) * length;
 }
 
 
-int IsCircleColliding(circle c1, circle c2)
+int IsCircleColliding(dtbCircle c1, dtbCircle c2)
 {
-	return Distancef(c1.x, c1.y, c2.x, c2.y) <= c1.radius + c2.radius;
+	return dtbDistancef(c1.x, c1.y, c2.x, c2.y) <= c1.radius + c2.radius;
 }
 
-int IsCirclePointColliding(float x, float y, circle c)
+int dtbIsCirclePointColliding(float x, float y, dtbCircle c)
 {
-	return Distancef(x, y, c.x, c.y) < c.radius;
+	return dtbDistancef(x, y, c.x, c.y) < c.radius;
 }
 
 #define DTB_MATH_H
