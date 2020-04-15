@@ -3,10 +3,10 @@
 
 Library    | Category | Description
 --------------------- | -------- | --------------------------------
-**[dtb.h](src/dtb.h)** | Utility | A utility file that intends to make pure C easier with a few personal things for my own use.
-**[dtb_platform.h](src/dtb_platform.h)** | Graphics | A file that creates a OpenGL window on both Windows and Linux in 30 lines or less
-**[dtb_math.h](src/dtb_math.h)** | Utility | A math library mainly used for game development and still heavily under development
-**[dtb_gl.h](src/dtb_gl.h)** | Graphics | A OpenGL wrapper meant to make OpenGL easier to use
+**[dtb.h](dtb.h)** | Utility | A single-header utility file that contains helper functions and other utilities.
+**[dtb_platform.h](dtb_platform.h)** | Graphics | A single-header file that creates a instance of a window, in 30 lines or less, mainly directed at game-tools
+**[dtb_math.h](dtb_math.h)** | Utility | A single-header file math library used for game development
+**[dtb_gl.h](dtb_gl.h)** | Graphics | An OpenGL wrapper, combined with **[dtb_gl.c](dtb_gl.c)**, meant to limit linking hell.
 
 
 # Note:
