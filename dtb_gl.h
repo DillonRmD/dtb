@@ -14,7 +14,7 @@
 *  dtb_gl.h and dtb_gl.c are bundled together compile dtb_gl.c with your project while including dtb_gl.h!!!
 *
 *  EXAMPLE:
-*  
+*
   *  #include "dtb_gl.h"
   *  int main(int argc, char* argv[])
   *  {
@@ -119,19 +119,19 @@ typedef unsigned char uchar;
 #define GL_STENCIL_INDEX8	             0x8D48
 #define GL_CLAMP_TO_EDGE                  0x812F
 
-#define GL_EXT_TEXTURE_CUBE_MAP		          1 
-#define GL_NORMAL_MAP_EXT                   0x8511 
-#define GL_REFLECTION_MAP_EXT               0x8512 
-#define GL_TEXTURE_CUBE_MAP_EXT             0x8513 
-#define GL_TEXTURE_BINDING_CUBE_MAP_EXT     0x8514 
-#define GL_TEXTURE_CUBE_MAP_POSITIVE_X_EXT  0x8515 
-#define GL_TEXTURE_CUBE_MAP_NEGATIVE_X_EXT  0x8516 
-#define GL_TEXTURE_CUBE_MAP_POSITIVE_Y_EXT  0x8517 
-#define GL_TEXTURE_CUBE_MAP_NEGATIVE_Y_EXT  0x8518 
-#define GL_TEXTURE_CUBE_MAP_POSITIVE_Z_EXT  0x8519 
-#define GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_EXT  0x851A 
-#define GL_PROXY_TEXTURE_CUBE_MAP_EXT       0x851B 
-#define GL_MAX_CUBE_MAP_TEXTURE_SIZE_EXT    0x851C 
+#define GL_EXT_TEXTURE_CUBE_MAP		          1
+#define GL_NORMAL_MAP_EXT                   0x8511
+#define GL_REFLECTION_MAP_EXT               0x8512
+#define GL_TEXTURE_CUBE_MAP_EXT             0x8513
+#define GL_TEXTURE_BINDING_CUBE_MAP_EXT     0x8514
+#define GL_TEXTURE_CUBE_MAP_POSITIVE_X_EXT  0x8515
+#define GL_TEXTURE_CUBE_MAP_NEGATIVE_X_EXT  0x8516
+#define GL_TEXTURE_CUBE_MAP_POSITIVE_Y_EXT  0x8517
+#define GL_TEXTURE_CUBE_MAP_NEGATIVE_Y_EXT  0x8518
+#define GL_TEXTURE_CUBE_MAP_POSITIVE_Z_EXT  0x8519
+#define GL_TEXTURE_CUBE_MAP_NEGATIVE_Z_EXT  0x851A
+#define GL_PROXY_TEXTURE_CUBE_MAP_EXT       0x851B
+#define GL_MAX_CUBE_MAP_TEXTURE_SIZE_EXT    0x851C
 
 #define GL_VERTEX_SHADER_ARB				0x8B31
 #define GL_FRAGMENT_SHADER_ARB				0x8B30
@@ -193,17 +193,7 @@ extern "C" {
 	DTB_EXTERN bool dtbgl_init();
 	
 	// NOTE(DILLON): Utility functions, not necessart for the wrapper to function
-	DTB_EXTERN uint dtbgl_create_shaders_file(char* vert_name, char* frag_name);
 	DTB_EXTERN uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shader);
-	DTB_EXTERN uint dtbgl_create_buffer(size_t size, const void* data, GLenum target, GLenum usage_hint);
-	
-	DTB_EXTERN uint dtbgl_create_ibo(size_t size, const void* data, GLenum usage_hint);
-	DTB_EXTERN uint dtbgl_create_vbo(size_t size, const void* data, GLenum usage_hint);
-	
-	DTB_EXTERN void dtbgl_draw_cube(float x, float y, float z, float edge_length);
-	DTB_EXTERN void dtbgl_draw_primitive_rect(float x, float y, float width, float height, float r, float g, float b, float a);
-	
-	DTB_EXTERN void dtbgl_setup_view_2d(int width, int height, bool top_down);
 	
 	// NOTE(DILLON): GL Calls
 	GLubyte *(APIENTRY *glGetStringi)(GLenum name, GLuint index);

@@ -1,3 +1,33 @@
+/*  ============================================================================================
+*  PROJECT:  Dillon's Tool Box Platform Edition
+*  AUTHOR:   Dillon Williams
+*  LICENSE:  Do What The Fuck Ever license
+*  LANGUAGE: C\C++
+*
+*  INFORMATION:
+*  Include this file into your main compilation unit and follow the example as follows:
+  *
+*  Example on how to implement:
+*  ===========================================================================================
+*  #define DTB_PLATFORM_H
+*  #include "dtb_platform.h"
+
+*  u32 DTB_INIT(dtbPlatform* platform)
+*  {
+    *      return 0;
+*  }
+*
+*  void DTB_LOOP(dtbPlatform* platform, float deltaTime)
+*  {
+*  }
+*  ===========================================================================================
+*
+*  This is developed in my free time, constant and consistent updates should not be expected.
+*  Feel free to modify this code to your preference.
+*
+*  ============================================================================================
+*/
+
 #if !defined(DTB_PLATFOR_H)
 
 typedef unsigned int u32;
@@ -146,6 +176,11 @@ b32 dtbIsKeyDown(dtbPlatform platform, dtb_key_type type)
 
 #if defined(_WIN32)
 #include <windows.h>
+
+b32 win32SetupOpenGL()
+{
+    return false;
+}
 
 void win32TranslateVKcodes(dtbPlatform* platform, u32 vkCode)
 {
@@ -522,7 +557,8 @@ WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int com
     wc.lpfnWndProc = win32Callback;
     wc.lpszClassName = DTB_WINDOW_NAME;
     
-    if(!RegisterClass(&wc)){
+    if(!RegisterClass(&wc))
+    {
         // TODO(Dillon): Error
     }
     
@@ -534,7 +570,8 @@ WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int com
                                 wc.hInstance,
                                 0);
     
-    if(!window){
+    if(!window)
+    {
         // TODO(Dillon): Error
     }
     

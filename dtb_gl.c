@@ -7,7 +7,7 @@ char* dtbgl_check_gl_error()
     GLenum err;
     while( !(err = glGetError()) ){
         return (char*)err;
-    }  
+    }
 	
 	return NULL;
 }
@@ -26,18 +26,18 @@ void *dtbgl_win32_grab_gl_address(const char *name)
 }
 #endif
 
-void dtbgl_extension_init(void*(*glGetProcAddr)(const char* proc)) 
+void dtbgl_extension_init(void*(*glGetProcAddr)(const char* proc))
 {
 	sui_gl_GetProcAddress = glGetProcAddr;
 }
 
-void *dtbgl_extension_get_addr(const char* proc) 
+void *dtbgl_extension_get_addr(const char* proc)
 {
-	if (sui_gl_GetProcAddress == NULL) 
+	if (sui_gl_GetProcAddress == NULL)
 	{
 		return NULL;
 	}
-	else 
+	else
 	{
 		return sui_gl_GetProcAddress(proc);
 	}
@@ -359,92 +359,13 @@ uint dtbgl_create_vbo(size_t size, const void* data, GLenum usage_hint)
 	return dtbgl_create_buffer(size, data, GL_ARRAY_BUFFER, usage_hint);
 }
 
-void dtbgl_draw_cube(float x, float y, float z, float edge_length)
-{
-	float half_side_length = edge_length * 0.5f;
-	
-	float vertices[] =
-	{
-		//front face
-		x - half_side_length, y + half_side_length, z + half_side_length,
-		x + half_side_length, y + half_side_length, z + half_side_length,
-		x + half_side_length, y - half_side_length, z + half_side_length,
-		x - half_side_length, y - half_side_length, z + half_side_length,
-		
-		//back face
-		x - half_side_length, y + half_side_length, z - half_side_length,
-		x + half_side_length, y + half_side_length, z - half_side_length,
-		x + half_side_length, y - half_side_length, z - half_side_length,
-		x - half_side_length, y - half_side_length, z - half_side_length,
-		
-		//left face
-		x - half_side_length, y + half_side_length, z + half_side_length,
-		x - half_side_length, y + half_side_length, z - half_side_length,
-		x - half_side_length, y - half_side_length, z - half_side_length,
-		x - half_side_length, y - half_side_length, z + half_side_length,
-		
-		// right face
-		x + half_side_length, y + half_side_length, z + half_side_length,
-		x + half_side_length, y + half_side_length, z - half_side_length,
-		x + half_side_length, y - half_side_length, z - half_side_length,
-		x + half_side_length, y - half_side_length, z + half_side_length,
-		
-		// top face
-		x - half_side_length, y + half_side_length, z + half_side_length,
-		x - half_side_length, y + half_side_length, z - half_side_length,
-		x + half_side_length, y + half_side_length, z - half_side_length,
-		x + half_side_length, y + half_side_length, z + half_side_length,
-		
-		// bottom face
-		x - half_side_length, y - half_side_length, z + half_side_length,
-		x - half_side_length, y - half_side_length, z - half_side_length,
-		x + half_side_length, y - half_side_length, z - half_side_length,
-		x + half_side_length, y - half_side_length, z + half_side_length,
-	};
-	
-	
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, vertices);
-	glDrawArrays(GL_QUADS, 0, 24);
-	glDisableClientState(GL_VERTEX_ARRAY);
-}
-
-
-void dtbgl_draw_primitive_rect(float x, float y, float width, float height, float r, float g, float b, float a)
-{
-	glBegin(GL_QUADS);
-	{
-		glColor4f(r, g, b, a);
-		glVertex2f(x, y);
-		glVertex2f(x, y + height);
-		glVertex2f(x + width, y + height);
-		glVertex2f(x + width, y);
-	}
-	glEnd();
-}
-
-
-// NOTE(DILLON): bool refers the direction rendering or screencoords
-void dtbgl_setup_view_2d(int width, int height, bool top_down) 
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	if(top_down == true)
-		glOrtho(0.0f, width, height, 0.0f, -1, 1);
-	else
-		glOrtho(0.0f, width, 0.0f, height, -1, 1);
-	
-	glMatrixMode (GL_MODELVIEW);
-	glLoadIdentity();
-}
-
 uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shader)
 {
 	char info_log[512];
 	int success;
 	int code_lengths[] = {-1, -1, -1, -1, -1, -1};
 	
-	char* vert_code[] = 
+	char* vert_code[] =
 	{
 		header_code,
 		vert_shader,
