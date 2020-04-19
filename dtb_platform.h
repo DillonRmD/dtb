@@ -151,6 +151,8 @@ typedef struct
 typedef struct
 {
     dtb_key keys[DTB_KEY_MAX];
+    u32 mousePositionX;
+    u32 mousePositionY;
 }dtb_input;
 
 typedef struct
@@ -535,6 +537,14 @@ void win32TranslateVKcodes(dtbPlatform* platform, u32 vkCode)
     }
 }
 
+#ifdef DTB_PLATFORM_SHOW_CONSOLE
+int main(int argc, char* argv[])
+{
+    WinMain(GetModuleHandle(0),0, *argv, SW_SHOW);
+    return 0;
+}
+
+#endif
 
 LRESULT CALLBACK win32Callback(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
 {
@@ -614,6 +624,16 @@ WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int com
             
             TranslateMessage(&msg);
             DispatchMessage(&msg);
+        }
+        
+        POINT p;
+        if(GetCursorPos(&p))
+        {
+            if(ScreenToClient(window, &p))
+            {
+                platform.input.mousePositionX = p.x;
+                platform.input.mousePositionY = p.y;
+            }
         }
         
         if(globalRunning == false)
