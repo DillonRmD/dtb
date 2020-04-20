@@ -65,10 +65,6 @@ typedef unsigned int GLuint;
 typedef int GLint;
 typedef void GLvoid;
 
-typedef unsigned int uint;
-typedef unsigned short ushort;
-typedef unsigned char uchar;
-
 #define GL_TEXTURE0_ARB								0x84C0
 
 #define GL_FRAMEBUFFER_EXT                     0x8D40
@@ -193,7 +189,7 @@ extern "C" {
 	DTB_EXTERN bool dtbgl_init();
 	
 	// NOTE(DILLON): Utility functions, not necessart for the wrapper to function
-	DTB_EXTERN uint dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shader);
+	DTB_EXTERN unsigned int dtbgl_create_shaders(char* header_code, char* vert_shader, char* frag_shader);
 	
 	// NOTE(DILLON): GL Calls
 	GLubyte *(APIENTRY *glGetStringi)(GLenum name, GLuint index);
@@ -210,66 +206,77 @@ extern "C" {
 	void (APIENTRY *glVertexAttribPointer)(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer);
 	void (APIENTRY *glBufferSubData)(GLenum target, size_t offset, size_t size, const void *data);
 	
-	// NOTE(DILLON): Shaders
-	GLuint(APIENTRY *glCreateShader)(GLenum shaderType);
-	void (APIENTRY *glShaderSource)(GLuint shader, GLsizei count, const GLchar **string, const GLint *length);
-	void (APIENTRY *glCompileShader)(GLenum shaderType);
-	void (APIENTRY *glGetShaderiv)(GLuint shader, GLenum pname, GLint *params);
-	void (APIENTRY *glGetShaderInfoLog)(GLuint shader, GLsizei max_length, GLsizei *length, GLchar *info_log);
-	void (APIENTRY *glDeleteShader)(GLuint shader);
-	GLuint(APIENTRY *glCreateProgram)();
-	void (APIENTRY *glAttachShader)(GLuint program, GLuint shader);
-	void (APIENTRY *glLinkProgram)(GLuint program);
-	void (APIENTRY *glGetProgramiv)(GLuint program, GLenum pname, GLint *params);
-	void (APIENTRY *glDeleteProgram)(GLuint program);
-	void (APIENTRY *glDetachShader)(GLuint program, GLuint shader);
-	void (APIENTRY *glGetProgramInfoLog)(GLuint program, GLsizei max_length, GLsizei *length, GLchar *info_log);
-	void (APIENTRY *glUseProgram)(GLuint program);
-	
-	// NOTE(DILLON): Uniforms
-	GLint (APIENTRY *glGetUniformLocation)(GLuint program, GLchar *name);
-	
-	void (APIENTRY *glUniform1f)(GLint location, GLfloat v0);
-	void (APIENTRY *glUniform2f)(GLint location, GLfloat v0, GLfloat v1);
-	void (APIENTRY *glUniform3f)(GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
-	void (APIENTRY *glUniform4f)(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
-	
-	void (APIENTRY *glUniform1i)(GLint location, GLint v0);
-	void (APIENTRY *glUniform2i)(GLint location, GLint v0, GLint v1);
-	void (APIENTRY *glUniform3i)(GLint location, GLint v0, GLint v1, GLint v2);
-	void (APIENTRY *glUniform4i)(GLint location, GLint v0, GLint v1, GLint v2, GLint v3);
-	
-	void (APIENTRY *glUniform1ui)(GLint location, GLuint v0);
-	void (APIENTRY *glUniform2ui)(GLint location, GLuint v0, GLuint v1);
-	void (APIENTRY *glUniform3ui)(GLint location, GLuint v0, GLuint v1, GLuint v2);
-	void (APIENTRY *glUniform4ui)(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3);
-	
-	void (APIENTRY *glUniform1fv)(GLint location, GLsizei count, const GLfloat *value);
-	void (APIENTRY *glUniform2fv)(GLint location, GLsizei count, const GLfloat *value);
-	void (APIENTRY *glUniform3fv)(GLint location, GLsizei count, const GLfloat *value);
-	void (APIENTRY *glUniform4fv)(GLint location, GLsizei count, const GLfloat *value);
-	
-	void (APIENTRY *glUniform1iv)(GLint location, GLsizei count, const GLint *value);
-	void (APIENTRY *glUniform2iv)(GLint location, GLsizei count, const GLint *value);
-	void (APIENTRY *glUniform3iv)(GLint location, GLsizei count, const GLint *value);
-	void (APIENTRY *glUniform4iv)(GLint location, GLsizei count, const GLint *value);
-	
-	void (APIENTRY *glUniform1uiv)(GLint location, GLsizei count, const GLuint *value);
-	void (APIENTRY *glUniform2uiv)(GLint location, GLsizei count, const GLuint *value);
-	void (APIENTRY *glUniform3uiv)(GLint location, GLsizei count, const GLuint *value);
-	void (APIENTRY *glUniform4uiv)(GLint location, GLsizei count, const GLuint *value);
-	
-	void (APIENTRY *glUniformMatrix2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-	void (APIENTRY *glUniformMatrix3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-	void (APIENTRY *glUniformMatrix4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-	
-	void (APIENTRY *glUniformMatrix2x3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-	void (APIENTRY *glUniformMatrix3x2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-	void (APIENTRY *glUniformMatrix2x4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-	void (APIENTRY *glUniformMatrix4x2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-	void (APIENTRY *glUniformMatrix3x4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-	void (APIENTRY *glUniformMatrix4x3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-	
+    
+    void (APIENTRY *glDeleteVertexArrays)(GLsizei n, const GLuint *arrays);
+    void (APIENTRY *glDeleteBuffers)(GLsizei n, const GLuint *buffers);
+    void (APIENTRY *glBindAttribLocation)(GLuint program, GLuint index, const GLchar *name);
+    void (APIENTRY *glBindFragDataLocation)(GLuint program, GLuint colorNumber, const char* name);
+    
+    // NOTE(Dillon): Textures
+    void (APIENTRY *glActiveTexture)(GLenum texture);
+    
+    // NOTE(DILLON): Shaders
+    GLuint(APIENTRY *glCreateShader)(GLenum shaderType);
+    void (APIENTRY *glShaderSource)(GLuint shader, GLsizei count, const GLchar **string, const GLint *length);
+    void (APIENTRY *glCompileShader)(GLenum shaderType);
+    void (APIENTRY *glGetShaderiv)(GLuint shader, GLenum pname, GLint *params);
+    void (APIENTRY *glGetShaderInfoLog)(GLuint shader, GLsizei max_length, GLsizei *length, GLchar *info_log);
+    void (APIENTRY *glDeleteShader)(GLuint shader);
+    GLuint(APIENTRY *glCreateProgram)();
+    void (APIENTRY *glAttachShader)(GLuint program, GLuint shader);
+    void (APIENTRY *glLinkProgram)(GLuint program);
+    void (APIENTRY *glGetProgramiv)(GLuint program, GLenum pname, GLint *params);
+    void (APIENTRY *glDeleteProgram)(GLuint program);
+    void (APIENTRY *glDetachShader)(GLuint program, GLuint shader);
+    void (APIENTRY *glGetProgramInfoLog)(GLuint program, GLsizei max_length, GLsizei *length, GLchar *info_log);
+    void (APIENTRY *glUseProgram)(GLuint program);
+    
+    // NOTE(DILLON): Uniforms
+    GLint (APIENTRY *glGetUniformLocation)(GLuint program, GLchar *name);
+    
+    void (APIENTRY *glGetUniformfv)(GLuint program, GLint location, GLfloat *params);
+    
+    void (APIENTRY *glUniform1f)(GLint location, GLfloat v0);
+    void (APIENTRY *glUniform2f)(GLint location, GLfloat v0, GLfloat v1);
+    void (APIENTRY *glUniform3f)(GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
+    void (APIENTRY *glUniform4f)(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
+    
+    void (APIENTRY *glUniform1i)(GLint location, GLint v0);
+    void (APIENTRY *glUniform2i)(GLint location, GLint v0, GLint v1);
+    void (APIENTRY *glUniform3i)(GLint location, GLint v0, GLint v1, GLint v2);
+    void (APIENTRY *glUniform4i)(GLint location, GLint v0, GLint v1, GLint v2, GLint v3);
+    
+    void (APIENTRY *glUniform1ui)(GLint location, GLuint v0);
+    void (APIENTRY *glUniform2ui)(GLint location, GLuint v0, GLuint v1);
+    void (APIENTRY *glUniform3ui)(GLint location, GLuint v0, GLuint v1, GLuint v2);
+    void (APIENTRY *glUniform4ui)(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3);
+    
+    void (APIENTRY *glUniform1fv)(GLint location, GLsizei count, const GLfloat *value);
+    void (APIENTRY *glUniform2fv)(GLint location, GLsizei count, const GLfloat *value);
+    void (APIENTRY *glUniform3fv)(GLint location, GLsizei count, const GLfloat *value);
+    void (APIENTRY *glUniform4fv)(GLint location, GLsizei count, const GLfloat *value);
+    
+    void (APIENTRY *glUniform1iv)(GLint location, GLsizei count, const GLint *value);
+    void (APIENTRY *glUniform2iv)(GLint location, GLsizei count, const GLint *value);
+    void (APIENTRY *glUniform3iv)(GLint location, GLsizei count, const GLint *value);
+    void (APIENTRY *glUniform4iv)(GLint location, GLsizei count, const GLint *value);
+    
+    void (APIENTRY *glUniform1uiv)(GLint location, GLsizei count, const GLuint *value);
+    void (APIENTRY *glUniform2uiv)(GLint location, GLsizei count, const GLuint *value);
+    void (APIENTRY *glUniform3uiv)(GLint location, GLsizei count, const GLuint *value);
+    void (APIENTRY *glUniform4uiv)(GLint location, GLsizei count, const GLuint *value);
+    
+    void (APIENTRY *glUniformMatrix2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+    void (APIENTRY *glUniformMatrix3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+    void (APIENTRY *glUniformMatrix4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+    
+    void (APIENTRY *glUniformMatrix2x3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+    void (APIENTRY *glUniformMatrix3x2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+    void (APIENTRY *glUniformMatrix2x4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+    void (APIENTRY *glUniformMatrix4x2fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+    void (APIENTRY *glUniformMatrix3x4fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+    void (APIENTRY *glUniformMatrix4x3fv)(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+    
 #ifdef __cplusplus
 }
 #endif
