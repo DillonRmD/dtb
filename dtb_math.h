@@ -10,7 +10,7 @@
 *
 *  This is developed in my free time, constant and consistent updates should not be expected.
 *  Feel free to modify this code to your preference.
-*  
+*
 *  ============================================================================================
 */
 
@@ -474,16 +474,32 @@ dtbV2 operator+(dtbV2 left, dtbV2 right){
 	return dtbVec2_Add(left, right);
 }
 
+dtbV2 operator+=(dtbV2 left, dtbV2 right){
+    return left = left + right;
+}
+
 dtbV2 operator-(dtbV2 left, dtbV2 right){
 	return dtbVec2_Subtract(left, right);
+}
+
+dtbV2 operator-=(dtbV2 left, dtbV2 right){
+    return left = left - right;
 }
 
 dtbV2 operator*(dtbV2 left, dtbV2 right){
 	return dtbVec2_Multiply(left, right);
 }
 
+dtbV2 operator*=(dtbV2 left, dtbV2 right){
+    return left = left * right;
+}
+
 dtbV2 operator/(dtbV2 left, dtbV2 right){
 	return dtbVec2_Divide(left, right);
+}
+
+dtbV2 operator/=(dtbV2 left, dtbV2 right){
+    return left = left / right;
 }
 
 dtbV2 operator+(dtbV2 left, float right)
@@ -491,9 +507,19 @@ dtbV2 operator+(dtbV2 left, float right)
 	return dtbVec2_Addf(left, right);
 }
 
+dtbV2 operator+=(dtbV2 left, float right)
+{
+	return left = left + right;
+}
+
 dtbV2 operator-(dtbV2 left, float right)
 {
 	return dtbVec2_Subtractf(left, right);
+}
+
+dtbV2 operator-=(dtbV2 left, float right)
+{
+	return left = left - right;
 }
 
 dtbV2 operator*(dtbV2 left, float right)
@@ -501,25 +527,50 @@ dtbV2 operator*(dtbV2 left, float right)
 	return dtbVec2_Multiplyf(left, right);
 }
 
+dtbV2 operator*=(dtbV2 left, float right)
+{
+	return left = left * right;
+}
+
 dtbV2 operator/(dtbV2 left, float right)
 {
 	return dtbVec2_Dividef(left, right);
+}
+
+dtbV2 operator/=(dtbV2 left, float right){
+	return left = left / right;
 }
 
 dtbV3 operator+(dtbV3 left, dtbV3 right){
 	return dtbVec3_Add(left, right);
 }
 
+dtbV3 operator+=(dtbV3 left, dtbV3 right){
+    return left = left + right;
+}
+
 dtbV3 operator-(dtbV3 left, dtbV3 right){
 	return dtbVec3_Subtract(left, right);
+}
+
+dtbV3 operator-=(dtbV3 left, dtbV3 right){
+    return left = left - right;
 }
 
 dtbV3 operator*(dtbV3 left, dtbV3 right){
 	return dtbVec3_Multiply(left, right);
 }
 
+dtbV3 operator*=(dtbV3 left, dtbV3 right){
+    return left = left * right;
+}
+
 dtbV3 operator/(dtbV3 left, dtbV3 right){
 	return dtbVec3_Divide(left, right);
+}
+
+dtbV3 operator/=(dtbV3 left, dtbV3 right){
+    return left = left / right;
 }
 
 dtbV3 operator+(dtbV3 left, float right)
@@ -527,9 +578,19 @@ dtbV3 operator+(dtbV3 left, float right)
 	return dtbVec3_Addf(left, right);
 }
 
+dtbV3 operator+=(dtbV3 left, float right)
+{
+	return left = left + right;
+}
+
 dtbV3 operator-(dtbV3 left, float right)
 {
 	return dtbVec3_Subtractf(left, right);
+}
+
+dtbV3 operator-=(dtbV3 left, float right)
+{
+	return left = left - right;
 }
 
 dtbV3 operator*(dtbV3 left, float right)
@@ -537,25 +598,51 @@ dtbV3 operator*(dtbV3 left, float right)
 	return dtbVec3_Multiplyf(left, right);
 }
 
+dtbV3 operator*=(dtbV3 left, float right)
+{
+	return left = left * right;
+}
+
 dtbV3 operator/(dtbV3 left, float right)
 {
 	return dtbVec3_Dividef(left, right);
+}
+
+dtbV3 operator/=(dtbV3 left, float right)
+{
+	return left = left / right;
 }
 
 dtbV4 operator+(dtbV4 left, dtbV4 right){
 	return dtbVec4_Add(left, right);
 }
 
+dtbV4 operator+=(dtbV4 left, dtbV4 right){
+	return left = left + right;
+}
+
 dtbV4 operator-(dtbV4 left, dtbV4 right){
 	return dtbVec4_Subtract(left, right);
+}
+
+dtbV4 operator-=(dtbV4 left, dtbV4 right){
+	return left = left - right;
 }
 
 dtbV4 operator*(dtbV4 left, dtbV4 right){
 	return dtbVec4_Multiply(left, right);
 }
 
+dtbV4 operator*=(dtbV4 left, dtbV4 right){
+	return left = left * right;
+}
+
 dtbV4 operator/(dtbV4 left, dtbV4 right){
 	return dtbVec4_Divide(left, right);
+}
+
+dtbV4 operator/=(dtbV4 left, dtbV4 right){
+	return left = left / right;
 }
 
 dtbV4 operator+(dtbV4 left, float right)
@@ -563,9 +650,19 @@ dtbV4 operator+(dtbV4 left, float right)
 	return dtbVec4_Addf(left, right);
 }
 
+dtbV4 operator+=(dtbV4 left, float right)
+{
+	return left = left + right;
+}
+
 dtbV4 operator-(dtbV4 left, float right)
 {
 	return dtbVec4_Subtractf(left, right);
+}
+
+dtbV4 operator-=(dtbV4 left, float right)
+{
+	return left = left - right;
 }
 
 dtbV4 operator*(dtbV4 left, float right)
@@ -573,21 +670,43 @@ dtbV4 operator*(dtbV4 left, float right)
 	return dtbVec4_Multiplyf(left, right);
 }
 
+dtbV4 operator*=(dtbV4 left, float right)
+{
+	return left = left * right;
+}
+
 dtbV4 operator/(dtbV4 left, float right)
 {
 	return dtbVec4_Dividef(left, right);
+}
+
+dtbV4 operator/=(dtbV4 left, float right)
+{
+	return left = left / right;
 }
 
 dtbM4 operator+(dtbM4 left, dtbM4 right){
 	return dtbMat4_Add(left, right);
 }
 
+dtbM4 operator+=(dtbM4 left, dtbM4 right){
+    return left = left + right;
+}
+
 dtbM4 operator-(dtbM4 left, dtbM4 right){
 	return dtbMat4_Subtract(left, right);
 }
 
+dtbM4 operator-=(dtbM4 left, dtbM4 right){
+    return left = left - right;
+}
+
 dtbM4 operator*(dtbM4 left, dtbM4 right){
 	return dtbMat4_Multiply(left, right);
+}
+
+dtbM4 operator*=(dtbM4 left, dtbM4 right){
+    return left = left * right;
 }
 
 dtbM4 operator/(dtbM4 left, float scalar){
@@ -655,6 +774,18 @@ dtbM4 dtbTranslate(dtbV3 translation){
 	
 	return result;
 }
+
+dtbM4 dtbScale(dtbV3 scale){
+    dtbM4 result = dtbMat4d(1.0f);
+    
+    result.elements[0][0] = scale.x;
+    result.elements[1][1] = scale.y;
+    result.elements[2][2] = scale.z;
+    
+    return result;
+}
+
+
 //IMPORTANT(dillon): NEED TO REMOVE THIS, NO HEADER FILE DEPENDENCY
 #include <math.h>
 dtbM4 dtbRotate(float angle, dtbV3 axis){
@@ -773,7 +904,7 @@ dtbM4 dtbLookAt(dtbV3 Eye, dtbV3 Center, dtbV3 Up)
 	return (Result);
 }
 
-dtbV2 dtbCross2f(dtbV2 vec) 
+dtbV2 dtbCross2f(dtbV2 vec)
 {
 	dtbV2 result = {0};
 	result.x = vec.y;
