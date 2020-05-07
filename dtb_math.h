@@ -25,6 +25,8 @@
 #define DTB_MOD(a, m) ((a) % (m)) >= 0 ? ((a) % (m)) : (((a) % (m)) + (m))
 #define DTB_SQUARE(x) x * x
 
+#include <math.h>
+
 typedef union dtbV2
 {
 	struct
@@ -231,8 +233,8 @@ dtbV3 dtbVec3_Add(dtbV3 left, dtbV3 right)
 {
 	dtbV3 result = {0};
 	result.x = left.x + right.x;
-	result.x = left.y + right.y;
-	result.x = left.z + right.z;
+	result.y = left.y + right.y;
+	result.z = left.z + right.z;
 	return result;
 }
 
@@ -240,8 +242,8 @@ dtbV3 dtbVec3_Addf(dtbV3 left, float right)
 {
 	dtbV3 result = {0};
 	result.x = left.x + right;
-	result.x = left.y + right;
-	result.x = left.z + right;
+	result.y = left.y + right;
+	result.z = left.z + right;
 	return result;
 }
 
@@ -249,8 +251,8 @@ dtbV3 dtbVec3_Subtract(dtbV3 left, dtbV3 right)
 {
 	dtbV3 result = {0};
 	result.x = left.x - right.x;
-	result.x = left.y - right.y;
-	result.x = left.z - right.z;
+	result.y = left.y - right.y;
+	result.z = left.z - right.z;
 	return result;
 }
 
@@ -258,8 +260,8 @@ dtbV3 dtbVec3_Subtractf(dtbV3 left, float right)
 {
 	dtbV3 result = {0};
 	result.x = left.x - right;
-	result.x = left.y - right;
-	result.x = left.z - right;
+	result.y = left.y - right;
+	result.z = left.z - right;
 	return result;
 }
 
@@ -267,8 +269,8 @@ dtbV3 dtbVec3_Multiply(dtbV3 left, dtbV3 right)
 {
 	dtbV3 result = {0};
 	result.x = left.x * right.x;
-	result.x = left.y * right.y;
-	result.x = left.z * right.z;
+	result.y = left.y * right.y;
+	result.z = left.z * right.z;
 	return result;
 }
 
@@ -276,8 +278,8 @@ dtbV3 dtbVec3_Multiplyf(dtbV3 left, float right)
 {
 	dtbV3 result = {0};
 	result.x = left.x * right;
-	result.x = left.y * right;
-	result.x = left.z * right;
+	result.y = left.y * right;
+	result.z = left.z * right;
 	return result;
 }
 
@@ -285,8 +287,8 @@ dtbV3 dtbVec3_Divide(dtbV3 left, dtbV3 right)
 {
 	dtbV3 result = {0};
 	result.x = left.x / right.x;
-	result.x = left.y / right.y;
-	result.x = left.z / right.z;
+	result.y = left.y / right.y;
+	result.z = left.z / right.z;
 	return result;
 }
 
@@ -294,8 +296,8 @@ dtbV3 dtbVec3_Dividef(dtbV3 left, float right)
 {
 	dtbV3 result = {0};
 	result.x = left.x / right;
-	result.x = left.y / right;
-	result.x = left.z / right;
+	result.y = left.y / right;
+	result.z = left.z / right;
 	return result;
 }
 
@@ -715,35 +717,16 @@ dtbM4 operator/(dtbM4 left, float scalar){
 
 #endif
 
-float dtbSqrt(float number)
-{
-	int i;
-	float x, y;
-	x = number * 0.5;
-	y = number;
-	i = *(int *)&y;
-	i = 0x5f3759df - (i >> 1);
-	y = *(float *)&i;
-	y = y * (1.5 - (x * y * y));
-	y = y * (1.5 - (x * y * y));
-	return number * y;
-}
-
-//TODO(dillon): This isn't very effiecent fix this later
 dtbV3 dtbVec3_Normalize(dtbV3 vec)
 {
 	dtbV3 Result = { 0 };
 	
-	float f;
-	f = dtbSqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
-	vec.x /= f;
-	vec.y /= f;
-	vec.z /= f;
+	float f = sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 	
-	Result.x = vec.x;
-	Result.y = vec.y;
-	Result.z = vec.z;
-	
+    Result.x = vec.x * (1.0f / f);
+    Result.y = vec.y * (1.0f / f);
+    Result.z = vec.z * (1.0f / f);
+    
 	return Result;
 }
 
@@ -785,9 +768,6 @@ dtbM4 dtbScale(dtbV3 scale){
     return result;
 }
 
-
-//IMPORTANT(dillon): NEED TO REMOVE THIS, NO HEADER FILE DEPENDENCY
-#include <math.h>
 dtbM4 dtbRotate(float angle, dtbV3 axis){
 	dtbM4 result = dtbMat4d(1.0f);
 	
@@ -914,27 +894,27 @@ dtbV2 dtbCross2f(dtbV2 vec)
 
 float dtbDistancef(float x1, float y1, float x2, float y2)
 {
-	return dtbSqrt(powf(x2 - x1, 2) + powf(y2 - y1, 2));
+	return sqrtf(powf(x2 - x1, 2) + powf(y2 - y1, 2));
 }
 
 float dtbDistancev(dtbV2 left, dtbV2 right)
 {
-	return dtbSqrt(powf(right.x - left.x, 2) + powf(right.y - left.y, 2));
+	return sqrtf(powf(right.x - left.x, 2) + powf(right.y - left.y, 2));
 }
 
 float dtbVec2_Length(dtbV2 vec)
 {
-	return dtbSqrt(vec.x * vec.x + vec.y * vec.y);
+	return sqrtf(vec.x * vec.x + vec.y * vec.y);
 }
 
 float dtbVec3_Length(dtbV3 vec)
 {
-	return dtbSqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
 
 float dtbVec4_Length(dtbV4 vec)
 {
-	return dtbSqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
+	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
 }
 
 void dtbV2_SetAngle(dtbV2 vec, float angle)
