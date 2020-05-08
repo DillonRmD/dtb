@@ -15,6 +15,17 @@
 */
 
 #if !defined DTB_MATH_H
+
+#if __cplusplus
+#define DTB_MATH_B32 bool
+#define DTB_MATH_TRUE 1
+#define DTB_MATH_FALSE 0
+#else
+typedef unsigned int DTB_MATH_B32;
+#define DTB_MATH_TRUE 1
+#define DTB_MATH_FALSE 0
+#endif
+
 #define PI 3.14159265358979323846
 #define PI32 3.14159265359f
 #define TWO_PI PI * 2
@@ -146,6 +157,19 @@ dtbV2 dtbVec2z()
 	return result;
 }
 
+DTB_MATH_B32 dtbVec2_Equals(dtbV2 left, dtbV2 right)
+{
+    for(int i = 0; i < 2; i++)
+    {
+        if(left.elements[i] != right.elements[i])
+        {
+            return DTB_MATH_FALSE;
+        }
+    }
+    
+    return DTB_MATH_TRUE;
+}
+
 dtbV2 dtbVec2_Add(dtbV2 left, dtbV2 right)
 {
 	dtbV2 result = {0};
@@ -227,6 +251,19 @@ dtbV3 dtbVec3z()
 {
 	dtbV3 result = {0};
 	return result;
+}
+
+DTB_MATH_B32 dtbVec3_Equals(dtbV3 left, dtbV3 right)
+{
+    for(int i = 0; i < 3; i++)
+    {
+        if(left.elements[i] != right.elements[i])
+        {
+            return DTB_MATH_FALSE;
+        }
+    }
+    
+    return DTB_MATH_TRUE;
 }
 
 dtbV3 dtbVec3_Add(dtbV3 left, dtbV3 right)
@@ -316,6 +353,19 @@ dtbV4 dtbVec4z()
 {
 	dtbV4 result = {0};
 	return result;
+}
+
+DTB_MATH_B32 dtbVec4_Equals(dtbV4 left, dtbV4 right)
+{
+    for(int i = 0; i < 4; i++)
+    {
+        if(left.elements[i] != right.elements[i])
+        {
+            return DTB_MATH_FALSE;
+        }
+    }
+    
+    return DTB_MATH_TRUE;
 }
 
 dtbV4 dtbVec4_Add(dtbV4 left, dtbV4 right)
@@ -543,6 +593,11 @@ dtbV2 operator/=(dtbV2 left, float right){
 	return left = left / right;
 }
 
+DTB_MATH_B32 operator==(dtbV2 left, dtbV2 right)
+{
+    return dtbVec2_Equals(left, right);
+}
+
 dtbV3 operator+(dtbV3 left, dtbV3 right){
 	return dtbVec3_Add(left, right);
 }
@@ -615,6 +670,11 @@ dtbV3 operator/=(dtbV3 left, float right)
 	return left = left / right;
 }
 
+DTB_MATH_B32 operator==(dtbV3 left, dtbV3 right)
+{
+    return dtbVec3_Equals(left, right);
+}
+
 dtbV4 operator+(dtbV4 left, dtbV4 right){
 	return dtbVec4_Add(left, right);
 }
@@ -685,6 +745,11 @@ dtbV4 operator/(dtbV4 left, float right)
 dtbV4 operator/=(dtbV4 left, float right)
 {
 	return left = left / right;
+}
+
+DTB_MATH_B32 operator==(dtbV4 left, dtbV4 right)
+{
+    return dtbVec4_Equals(left, right);
 }
 
 dtbM4 operator+(dtbM4 left, dtbM4 right){
