@@ -9,12 +9,10 @@
   *
 *  Example on how to implement:
 *  ===========================================================================================
-*  #define DTB_PLATFORM_H
 *  #include "dtb_platform.h"
-
 *  u32 DTB_INIT(dtbPlatform* platform)
 *  {
-    *      return 0;
+*      return 0;
 *  }
 *
 *  void DTB_LOOP(dtbPlatform* platform, float deltaTime)
@@ -141,6 +139,11 @@ typedef enum
 
 // TODO(Dillon): I don't like having this many structures clogging up the code base
 // Maybe look into changing this at a later point, when performance is a bigger issue
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+#endif
+
 typedef struct
 {
     dtb_key_type type;
@@ -161,6 +164,13 @@ typedef struct
     int windowWidth;
     int windowHeight;
     dtb_input input;
+#ifdef _WIN32
+	HWND win32WindowHandle;
+	HDC win32DeviceContext;
+	UINT win32Message;
+	WPARAM win32WParam;
+	LPARAM win32LParam;
+#endif
 }dtbPlatform;
 
 // NOTE(Dillon): User has to define this in main compilation unit
@@ -177,12 +187,11 @@ b32 dtbIsKeyDown(dtbPlatform platform, dtb_key_type type)
 }
 
 #if defined(_WIN32)
-#include <windows.h>
-
-b32 win32SetupOpenGL()
-{
-    return false;
-}
+#if defined(DTB_PLATFORM_OPENGL)
+#include <gl\gl.h>
+#include <gl\glu.h>
+#pragma comment(lib, "opengl32.lib")
+#endif
 
 void win32TranslateVKcodes(dtbPlatform* platform, u32 vkCode)
 {
@@ -571,8 +580,8 @@ WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int com
     {
         // TODO(Dillon): Error
     }
-    
-    HWND window = CreateWindowA(wc.lpszClassName, wc.lpszClassName,
+    dtbPlatform platform;
+    platform.win32WindowHandle = CreateWindowA(wc.lpszClassName, wc.lpszClassName,
                                 WS_OVERLAPPEDWINDOW | WS_VISIBLE,
                                 CW_USEDEFAULT, CW_USEDEFAULT,
                                 DTB_WINDOW_WIDTH, DTB_WINDOW_HEIGHT,
@@ -580,15 +589,46 @@ WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int com
                                 wc.hInstance,
                                 0);
     
-    if(!window)
+    if(!platform.win32WindowHandle)
     {
         // TODO(Dillon): Error
     }
     
-    ShowWindow(window, SW_SHOW);
-    UpdateWindow(window);
+    ShowWindow(platform.win32WindowHandle, SW_SHOW);
+    UpdateWindow(platform.win32WindowHandle);
     
-    dtbPlatform platform;
+    platform.win32DeviceContext = GetDC(platform.win32WindowHandle);
+#if defined(DTB_PLATFORM_OPENGL)
+    HGLRC glContext;
+    PIXELFORMATDESCRIPTOR pfd = { 0 };
+    pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+    pfd.nVersion = 1;
+    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+    pfd.iPixelType = PFD_TYPE_RGBA;
+    pfd.cColorBits = 32;
+    pfd.cAlphaBits = 8;
+    pfd.iLayerType = PFD_MAIN_PLANE;
+    
+    int pfIndex = ChoosePixelFormat(platform.win32DeviceContext, &pfd);
+    if (pfIndex == 0){
+        int x = 10;
+    }
+    
+    PIXELFORMATDESCRIPTOR suggestedPfd;
+    DescribePixelFormat(platform.win32DeviceContext, pfIndex, sizeof(suggestedPfd), &suggestedPfd);
+    
+    if (!SetPixelFormat(platform.win32DeviceContext, pfIndex, &pfd)){
+        int x = 10;
+    }
+    
+    glContext = wglCreateContext(platform.win32DeviceContext);
+    if (!wglMakeCurrent(platform.win32DeviceContext, glContext)){
+        int x = 10;
+    }
+    
+#endif
+    
+
     DTB_INIT(&platform);
     
     MSG msg;
@@ -596,6 +636,14 @@ WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int com
     platform.isRunning = globalRunning;
     while(platform.isRunning)
     {
+        INT64 countsPerSec = 0;
+        QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSec);
+        
+        float secPerCount = 1.0f / (float)countsPerSec;
+        
+        INT64 prevTime = 0;
+        QueryPerformanceCounter((LARGE_INTEGER*)&prevTime);
+        
         // NOTE(Dillon): Clear input at the start of each frame
         for(int i = 0; i < DTB_KEY_MAX; i++)
         {
@@ -624,12 +672,16 @@ WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int com
             
             TranslateMessage(&msg);
             DispatchMessage(&msg);
+
+			platform.win32Message = msg.message;
+			platform.win32LParam = msg.lParam;
+			platform.win32WParam = msg.wParam;
         }
         
         POINT p;
         if(GetCursorPos(&p))
         {
-            if(ScreenToClient(window, &p))
+            if(ScreenToClient(platform.win32WindowHandle, &p))
             {
                 platform.input.mousePositionX = p.x;
                 platform.input.mousePositionY = p.y;
@@ -641,8 +693,16 @@ WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int com
             platform.isRunning = false;
         }
         
-        // TODO(Dillon): Actually add delta time to this later
-        DTB_LOOP(&platform, 1.f / 60.f);
+        
+        INT64 currentTime = 0;
+        QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
+        float deltaTime = (currentTime - prevTime) * secPerCount;
+        
+        platform.win32DeviceContext = GetDC(platform.win32WindowHandle);
+        
+        DTB_LOOP(&platform, deltaTime);
+        
+        SwapBuffers(platform.win32DeviceContext);
     }
     
     return 0;
