@@ -134,14 +134,23 @@ typedef enum
     
 }dtb_key_type;
 
-// TODO(Dillon): I don't like having this many structures clogging up the code base
-// Maybe look into changing this at a later point, when performance is a bigger issue
-#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+// ================== START BLOCK ==================
+// {Macros for OpenGL}
 #include <gl\gl.h>
 #include <gl\glu.h>
+#pragma comment(lib, "glu32.lib")
+
+typedef  char GLchar;
+typedef unsigned int GLuint;
+typedef int GLint;
+typedef void GLvoid;
+
+#define CALLBACK    __stdcall
+#define WINGDIAPI   __declspec(dllimport)
+#define APIENTRY    __stdcall
 
 #pragma comment(lib, "opengl32.lib")
 
@@ -244,8 +253,14 @@ typedef enum
 #define GL_TEXTURE0                       0x84C0
 #define GL_VERTEX_SHADER                  0x8B31
 #define GL_INFO_LOG_LENGTH				0x8B84
+// ================== END BLOCK ==================
 
-#endif //_WIN32
+
+// NOTE(DILLON): 
+// ================== START BLOCK ==================
+//{ OpenGL > 3.0 function pointers that get loaded in *PLATFORM SPECIFIC*}
+
+// ================== END BLOCK ==================
 
 typedef struct
 {
@@ -295,6 +310,396 @@ bool global_running;
 #define dtb_key_is_down(platform, type) platform->input.keys[type].is_down
 
 #if defined(_WIN32)
+
+// NOTE(Dillon): While the MSDN documentation says that wglGetProcAddress returns NULL on failure, some 
+// implementations will return other values. 1, 2, and 3 are used, as well as -1.
+// wglGetProcAddress will not return function pointers from any OpenGL 
+// functions that are directly exported by the 
+// OpenGL32.DLL itself. This means the old ones from OpenGL version 1.1.
+// Fortunately those functions can be obtained // by the Win32's GetProcAddress. 
+// On the other hand GetProcAddress will not work for the functions for which 
+// wglGetProcAddress works. So in order to get the address of any GL function one can try
+// with wglGetProcAddress and if it fails, try again with the Win32's GetProcAddress:
+// (NOTE as well as code acquired from: https://www.khronos.org/opengl/wiki/Load_OpenGL_Functions)
+void* win32_get_gl_address(const char* name)
+{
+    void* addr = wglGetProcAddress(name);
+    
+    if(addr == 0 || (addr == (void*)0x1) || (addr == (void*)0x2) || (addr == (void*)0x3) || (addr == (void*)-1))
+    {
+        HMODULE glLib  = LoadLibraryA("opengl32.dll");
+        addr = (void*)GetProcAddress(glLib, name);
+    }
+    
+    return addr;
+}
+
+bool win32_gl_init(dtb_platform platform)
+{
+    HGLRC glContext;
+    PIXELFORMATDESCRIPTOR pfd = { 0 };
+    pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+    pfd.nVersion = 1;
+    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+    pfd.iPixelType = PFD_TYPE_RGBA;
+    pfd.cColorBits = 32;
+    pfd.cAlphaBits = 8;
+    pfd.iLayerType = PFD_MAIN_PLANE;
+    
+    int pfIndex = ChoosePixelFormat(platform.win32.device_context, &pfd);
+    if (pfIndex == 0){
+        return false;
+    }
+    
+    PIXELFORMATDESCRIPTOR suggestedPfd;
+    DescribePixelFormat(platform.win32.device_context, pfIndex, sizeof(suggestedPfd), &suggestedPfd);
+    
+    if (!SetPixelFormat(platform.win32.device_context, pfIndex, &pfd)){
+        return false;
+    }
+    
+    glContext = wglCreateContext(platform.win32.device_context);
+    if (!wglMakeCurrent(platform.win32.device_context, glContext)){
+        return false;
+    }
+    
+    // Load function pointers
+	/*
+    glGenerateMipmap = win32_get_gl_address("glGenerateMipmap");
+	if(glGenerateMipmap == NULL)
+	{
+		return false;
+	}
+	glActiveTexture = win32_get_gl_address("glActiveTexture");
+    if(glActiveTexture == NULL)
+    {
+        return false;
+    }
+	glGetStringi = win32_get_gl_address("glGetStringi");
+	if(glGetStringi == NULL)
+	{
+		return false;
+	}
+	glCreateShader = win32_get_gl_address("glCreateShader");
+	if(glCreateShader == NULL)
+	{
+		return false;
+	}
+	glShaderSource = win32_get_gl_address("glShaderSource");
+	if(glShaderSource == NULL)
+	{
+		return false;
+	}
+	glCompileShader = win32_get_gl_address("glCompileShader");
+	if(glCompileShader == NULL)
+	{
+		return false;
+	}
+	glGetShaderiv = win32_get_gl_address("glGetShaderiv");
+	if(glGetShaderiv == NULL)
+	{
+		return false;
+	}
+	glGetShaderInfoLog = win32_get_gl_address("glGetShaderInfoLog");
+	if(glGetShaderInfoLog == NULL)
+	{
+		return false;
+	}
+	glDeleteShader = win32_get_gl_address("glDeleteShader");
+	if(glDeleteShader == NULL)
+	{
+		return false;
+	}
+	glCreateProgram = win32_get_gl_address("glCreateProgram");
+	if(glCreateProgram == NULL)
+	{
+		return false;
+	}
+	glAttachShader = win32_get_gl_address("glAttachShader");
+	if(glAttachShader == NULL)
+	{
+		return false;
+	}
+	glLinkProgram = win32_get_gl_address("glLinkProgram");
+	if(glLinkProgram == NULL)
+	{
+		return false;
+	}
+	glGetProgramiv = win32_get_gl_address("glGetProgramiv");
+	if(glGetProgramiv == NULL)
+	{
+		return false;
+	}
+	glDeleteProgram = win32_get_gl_address("glDeleteProgram");
+	if(glDeleteProgram == NULL)
+	{
+		return false;
+	}
+	glDetachShader = win32_get_gl_address("glDetachShader");
+	if(glDetachShader == NULL)
+	{
+		return false;
+	}
+	glGetProgramInfoLog = win32_get_gl_address("glGetProgramInfoLog");
+	if(glGetProgramInfoLog == NULL)
+	{
+		return false;
+	}
+	glUseProgram = win32_get_gl_address("glUseProgram");
+	if(glUseProgram == NULL)
+	{
+		return false;
+	}
+	glGetUniformLocation = win32_get_gl_address("glGetUniformLocation");
+	if(glGetUniformLocation == NULL)
+	{
+		return false;
+	}
+	glUniform1f = win32_get_gl_address("glUniform1f");
+	if(glUniform1f == NULL)
+	{
+		return false;
+	}
+	glUniform2f = win32_get_gl_address("glUniform1f");
+	if(glUniform1f == NULL)
+	{
+		return false;
+	}
+	glUniform3f = win32_get_gl_address("glUniform1f");
+	if(glUniform1f == NULL)
+	{
+		return false;
+	}
+	glUniform4f = win32_get_gl_address("glUniform1f");
+	if(glUniform1f == NULL)
+	{
+		return false;
+	}
+	glUniform1i = win32_get_gl_address("glUniform1i");
+	if(glUniform1i == NULL)
+	{
+		return false;
+	}
+	glUniform2i = win32_get_gl_address("glUniform2i");
+	if(glUniform2i == NULL)
+	{
+		return false;
+	}
+	glUniform3i = win32_get_gl_address("glUniform3i");
+	if(glUniform3i == NULL)
+	{
+		return false;
+	}
+	glUniform4i = win32_get_gl_address("glUniform4i");
+	if(glUniform4i == NULL)
+	{
+		return false;
+	}
+	glUniform1ui = win32_get_gl_address("glUniform1ui");
+	if(glUniform1ui == NULL)
+	{
+		return false;
+	}
+	glUniform2ui = win32_get_gl_address("glUniform2ui");
+	if(glUniform2ui == NULL)
+	{
+		return false;
+	}
+	glUniform3ui = win32_get_gl_address("glUniform3ui");
+	if(glUniform3ui == NULL)
+	{
+		return false;
+	}
+	glUniform4ui = win32_get_gl_address("glUniform4ui");
+	if(glUniform4ui == NULL)
+	{
+		return false;
+	}
+	glUniform1fv = win32_get_gl_address("glUniform1fv");
+	if(glUniform1fv == NULL)
+	{
+		return false;
+	}
+	glUniform2fv = win32_get_gl_address("glUniform2fv");
+	if(glUniform2fv == NULL)
+	{
+		return false;
+	}
+	glUniform3fv = win32_get_gl_address("glUniform3fv");
+	if(glUniform3fv == NULL)
+	{
+		return false;
+	}
+	glUniform4fv = win32_get_gl_address("glUniform4fv");
+	if(glUniform4fv == NULL)
+	{
+		return false;
+	}
+	glUniform1iv = win32_get_gl_address("glUniform1iv");
+	if(glUniform1iv == NULL)
+	{
+		return false;
+	}
+	glUniform2iv = win32_get_gl_address("glUniform2iv");
+	if(glUniform2iv == NULL)
+	{
+		return false;
+	}
+	glUniform3iv = win32_get_gl_address("glUniform3iv");
+	if(glUniform3iv == NULL)
+	{
+		return false;
+	}
+	glUniform4iv = win32_get_gl_address("glUniform4iv");
+	if(glUniform4iv == NULL)
+	{
+		return false;
+	}
+	glUniform1uiv = win32_get_gl_address("glUniform1uiv");
+	if(glUniform1uiv == NULL)
+	{
+		return false;
+	}
+	glUniform2uiv = win32_get_gl_address("glUniform2uiv");
+	if(glUniform2uiv == NULL)
+	{
+		return false;
+	}
+	glUniform3uiv = win32_get_gl_address("glUniform3uiv");
+	if(glUniform3uiv == NULL)
+	{
+		return false;
+	}
+	glUniform4uiv = win32_get_gl_address("glUniform4uiv");
+	if(glUniform4uiv == NULL)
+	{
+		return false;
+	}
+	glUniformMatrix2fv = win32_get_gl_address("glUniformMatrix2fv");
+	if(glUniformMatrix2fv == NULL)
+	{
+		return false;
+	}
+	glUniformMatrix3fv = win32_get_gl_address("glUniformMatrix3fv");
+	if(glUniformMatrix3fv == NULL)
+	{
+		return false;
+	}
+	glUniformMatrix4fv = win32_get_gl_address("glUniformMatrix4fv");
+	if(glUniformMatrix4fv == NULL)
+	{
+		return false;
+	}
+	glUniformMatrix2x3fv = win32_get_gl_address("glUniformMatrix2x3fv");
+	if(glUniformMatrix2x3fv == NULL)
+	{
+		return false;
+	}
+	glUniformMatrix3x2fv = win32_get_gl_address("glUniformMatrix3x2fv");
+	if(glUniformMatrix3x2fv == NULL)
+	{
+		return false;
+	}
+	glUniformMatrix2x4fv = win32_get_gl_address("glUniformMatrix2x4fv");
+	if(glUniformMatrix2x4fv == NULL)
+	{
+		return false;
+	}
+	glUniformMatrix4x2fv = win32_get_gl_address("glUniformMatrix4x2fv");
+	if(glUniformMatrix4x2fv == NULL)
+	{
+		return false;
+	}
+	glUniformMatrix3x4fv = win32_get_gl_address("glUniformMatrix3x4fv");
+	if(glUniformMatrix3x4fv == NULL)
+	{
+		return false;
+	}
+	glUniformMatrix4x3fv = win32_get_gl_address("glUniformMatrix4x3fv");
+	if(glUniformMatrix4x3fv == NULL)
+	{
+		return false;
+	}
+    glGetUniformfv = win32_get_gl_address("glGetUniformfv");
+    if(glGetUniformfv == NULL)
+	{
+		return false;
+	}
+    
+    glBindVertexArray = win32_get_gl_address("glBindVertexArray");
+	if(glBindVertexArray == NULL)
+	{
+		return false;
+	}
+	glGenVertexArrays = win32_get_gl_address("glGenVertexArrays");
+	if(glGenVertexArrays == NULL)
+	{
+		return false;
+	}
+	glBindBuffer = win32_get_gl_address("glBindBuffer");
+	if(glBindBuffer == NULL)
+	{
+		return false;
+	}
+	glGenBuffers = win32_get_gl_address("glGenBuffers");
+	if(glGenBuffers == NULL)
+	{
+		return false;
+	}
+	glBufferData = win32_get_gl_address("glBufferData");
+	if(glBufferData == NULL)
+	{
+		return false;
+	}
+	glEnableVertexAttribArray = win32_get_gl_address("glEnableVertexAttribArray");
+	if(glEnableVertexAttribArray == NULL)
+	{
+		return false;
+	}
+	glDisableVertexAttribArray = win32_get_gl_address("glDisableVertexAttribArray");
+	if(glDisableVertexAttribArray == NULL)
+	{
+		return false;
+	}
+	glVertexAttribPointer = win32_get_gl_address("glVertexAttribPointer");
+	if(glVertexAttribPointer == NULL)
+	{
+		return false;
+	}
+	glBufferSubData = win32_get_gl_address("glBufferSubData");
+	if(glBufferSubData == NULL)
+	{
+		return false;
+	}
+	glDeleteVertexArrays = win32_get_gl_address("glDeleteVertexArrays");
+    if(glDeleteVertexArrays == NULL)
+    {
+        return false;
+    }
+    glDeleteBuffers = win32_get_gl_address("glDeleteBuffers");
+    if(glDeleteBuffers == NULL)
+    {
+        return false;
+    }
+    glBindAttribLocation = win32_get_gl_address("glBindAttribLocation");
+    if(glBindAttribLocation == NULL)
+    {
+        return false;
+    }
+    glBindFragDataLocation = win32_get_gl_address("glBindFragDataLocation");
+    if(glBindFragDataLocation == NULL)
+    {
+        return false;
+    }
+    */
+    return true;
+}
+
+void win32_throw_error_and_exit(dtb_platform* platform, const char* message)
+{
+    MessageBox(platform->win32.window_handle,(LPCSTR)message, (LPCSTR)"DTB_PLATFORM: FATAL ERROR", MB_OK);
+    ExitProcess(1);
+}
 
 void win32_translate_vk_codes(dtb_platform* platform, unsigned int vk_code)
 {
@@ -678,12 +1083,13 @@ WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int com
     wc.lpfnWndProc = win32Callback;
     wc.lpszClassName = DTB_WINDOW_NAME;
     
+    dtb_platform platform;
+
     if(!RegisterClass(&wc))
     {
-        // TODO(Dillon): Error
+        win32_throw_error_and_exit(&platform, "Failed to register the current window class");
     }
     
-    dtb_platform platform;
     platform.win32.window_handle = CreateWindowA(wc.lpszClassName, wc.lpszClassName,
                                                WS_OVERLAPPEDWINDOW | WS_VISIBLE,
                                                CW_USEDEFAULT, CW_USEDEFAULT,
@@ -694,43 +1100,18 @@ WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int com
     
     if(!platform.win32.window_handle)
     {
-        // TODO(Dillon): Error
+        win32_throw_error_and_exit(&platform, "Failed to create the window!");
     }
     
     ShowWindow(platform.win32.window_handle, SW_SHOW);
     UpdateWindow(platform.win32.window_handle);
     
     platform.win32.device_context = GetDC(platform.win32.window_handle);
-
-    HGLRC glContext;
-    PIXELFORMATDESCRIPTOR pfd = { 0 };
-    pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-    pfd.nVersion = 1;
-    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-    pfd.iPixelType = PFD_TYPE_RGBA;
-    pfd.cColorBits = 32;
-    pfd.cAlphaBits = 8;
-    pfd.iLayerType = PFD_MAIN_PLANE;
     
-    int pfIndex = ChoosePixelFormat(platform.win32.device_context, &pfd);
-    if (pfIndex == 0){
-        int x = 10;
+    if(!win32_gl_init(platform))
+    {
+        win32_throw_error_and_exit(&platform, "Failed to create an opengl context");
     }
-    
-    PIXELFORMATDESCRIPTOR suggestedPfd;
-    DescribePixelFormat(platform.win32.device_context, pfIndex, sizeof(suggestedPfd), &suggestedPfd);
-    
-    if (!SetPixelFormat(platform.win32.device_context, pfIndex, &pfd)){
-        int x = 10;
-    }
-    
-    glContext = wglCreateContext(platform.win32.device_context);
-    if (!wglMakeCurrent(platform.win32.device_context, glContext)){
-        int x = 10;
-    }
-    
-#endif
-    
     
     dtb_init(&platform);
     
@@ -812,5 +1193,7 @@ WinMain(HINSTANCE instance, HINSTANCE prev_instance, LPSTR command_line, int com
     
     return 0;
 }
+
+#endif
 
 #endif //DTB_PLATFORM_H
