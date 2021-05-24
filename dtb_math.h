@@ -118,19 +118,20 @@ typedef dtbV4 v4;
 typedef dtbM4 m4;
 #endif
 
+#define dtb_function inline
 
 // NOTE(DILLON): Strictly utitily functions outside of math structures
-float ToRadians(float degrees){
+dtb_function float ToRadians(float degrees){
 	float result = degrees * (PI32 / 180.f);
 	return result;
 }
 
-float Lerp(float a, float time, float b){
+dtb_function float Lerp(float a, float time, float b){
 	float result = (1.0f, - time) * a + time * b;
 	return result;
 }
 
-float Clamp(float min, float value, float max){
+dtb_function float Clamp(float min, float value, float max){
 	float result = value;
 	
 	if(result < min){
@@ -143,7 +144,7 @@ float Clamp(float min, float value, float max){
 }
 
 // NOTE(DILLON): Vector 2's
-dtbV2 dtbVec2(float x, float y)
+dtb_function dtbV2 dtbVec2(float x, float y)
 {
 	dtbV2 result = {0};
 	result.x = x;
@@ -151,13 +152,13 @@ dtbV2 dtbVec2(float x, float y)
 	return result;
 }
 
-dtbV2 dtbVec2z()
+dtb_function dtbV2 dtbVec2z()
 {
 	dtbV2 result = {0};
 	return result;
 }
 
-DTB_MATH_B32 dtbVec2_Equals(dtbV2 left, dtbV2 right)
+dtb_function DTB_MATH_B32 dtbVec2_Equals(dtbV2 left, dtbV2 right)
 {
     for(int i = 0; i < 2; i++)
     {
@@ -170,7 +171,7 @@ DTB_MATH_B32 dtbVec2_Equals(dtbV2 left, dtbV2 right)
     return DTB_MATH_TRUE;
 }
 
-dtbV2 dtbVec2_Add(dtbV2 left, dtbV2 right)
+dtb_function dtbV2 dtbVec2_Add(dtbV2 left, dtbV2 right)
 {
 	dtbV2 result = {0};
 	result.x = left.x + right.x;
@@ -178,7 +179,7 @@ dtbV2 dtbVec2_Add(dtbV2 left, dtbV2 right)
 	return result;
 }
 
-dtbV2 dtbVec2_Addf(dtbV2 left, float right)
+dtb_function dtbV2 dtbVec2_Addf(dtbV2 left, float right)
 {
 	dtbV2 result = {0};
 	result.x = left.x + right;
@@ -187,7 +188,7 @@ dtbV2 dtbVec2_Addf(dtbV2 left, float right)
 }
 
 
-dtbV2 dtbVec2_Subtract(dtbV2 left, dtbV2 right)
+dtb_function dtbV2 dtbVec2_Subtract(dtbV2 left, dtbV2 right)
 {
 	dtbV2 result = {0};
 	result.x = left.x - right.x;
@@ -195,7 +196,7 @@ dtbV2 dtbVec2_Subtract(dtbV2 left, dtbV2 right)
 	return result;
 }
 
-dtbV2 dtbVec2_Subtractf(dtbV2 left, float right)
+dtb_function dtbV2 dtbVec2_Subtractf(dtbV2 left, float right)
 {
 	dtbV2 result = {0};
 	result.x = left.x - right;
@@ -203,7 +204,7 @@ dtbV2 dtbVec2_Subtractf(dtbV2 left, float right)
 	return result;
 }
 
-dtbV2 dtbVec2_Multiply(dtbV2 left, dtbV2 right)
+dtb_function dtbV2 dtbVec2_Multiply(dtbV2 left, dtbV2 right)
 {
 	dtbV2 result = {0};
 	result.x = left.x * right.x;
@@ -211,7 +212,7 @@ dtbV2 dtbVec2_Multiply(dtbV2 left, dtbV2 right)
 	return result;
 }
 
-dtbV2 dtbVec2_Multiplyf(dtbV2 left, float right)
+dtb_function dtbV2 dtbVec2_Multiplyf(dtbV2 left, float right)
 {
 	dtbV2 result = {0};
 	result.x = left.x * right;
@@ -220,7 +221,7 @@ dtbV2 dtbVec2_Multiplyf(dtbV2 left, float right)
 }
 
 
-dtbV2 dtbVec2_Divide(dtbV2 left, dtbV2 right)
+dtb_function dtbV2 dtbVec2_Divide(dtbV2 left, dtbV2 right)
 {
 	dtbV2 result = {0};
 	result.x = left.x / right.x;
@@ -228,7 +229,7 @@ dtbV2 dtbVec2_Divide(dtbV2 left, dtbV2 right)
 	return result;
 }
 
-dtbV2 dtbVec2_Dividef(dtbV2 left, float right)
+dtb_function dtbV2 dtbVec2_Dividef(dtbV2 left, float right)
 {
 	dtbV2 result = {0};
 	result.x = left.x / right;
@@ -238,7 +239,7 @@ dtbV2 dtbVec2_Dividef(dtbV2 left, float right)
 
 
 // NOTE(DILLON): Vector 3's
-dtbV3 dtbVec3(float x, float y, float z)
+dtb_function dtbV3 dtbVec3(float x, float y, float z)
 {
 	dtbV3 result = {0};
 	result.x = x;
@@ -247,13 +248,13 @@ dtbV3 dtbVec3(float x, float y, float z)
 	return result;
 }
 
-dtbV3 dtbVec3z()
+dtb_function dtbV3 dtbVec3z()
 {
 	dtbV3 result = {0};
 	return result;
 }
 
-DTB_MATH_B32 dtbVec3_Equals(dtbV3 left, dtbV3 right)
+dtb_function DTB_MATH_B32 dtbVec3_Equals(dtbV3 left, dtbV3 right)
 {
     for(int i = 0; i < 3; i++)
     {
@@ -266,7 +267,7 @@ DTB_MATH_B32 dtbVec3_Equals(dtbV3 left, dtbV3 right)
     return DTB_MATH_TRUE;
 }
 
-dtbV3 dtbVec3_Add(dtbV3 left, dtbV3 right)
+dtb_function dtbV3 dtbVec3_Add(dtbV3 left, dtbV3 right)
 {
 	dtbV3 result = {0};
 	result.x = left.x + right.x;
@@ -275,7 +276,7 @@ dtbV3 dtbVec3_Add(dtbV3 left, dtbV3 right)
 	return result;
 }
 
-dtbV3 dtbVec3_Addf(dtbV3 left, float right)
+dtb_function dtbV3 dtbVec3_Addf(dtbV3 left, float right)
 {
 	dtbV3 result = {0};
 	result.x = left.x + right;
@@ -284,7 +285,7 @@ dtbV3 dtbVec3_Addf(dtbV3 left, float right)
 	return result;
 }
 
-dtbV3 dtbVec3_Subtract(dtbV3 left, dtbV3 right)
+dtb_function dtbV3 dtbVec3_Subtract(dtbV3 left, dtbV3 right)
 {
 	dtbV3 result = {0};
 	result.x = left.x - right.x;
@@ -293,7 +294,7 @@ dtbV3 dtbVec3_Subtract(dtbV3 left, dtbV3 right)
 	return result;
 }
 
-dtbV3 dtbVec3_Subtractf(dtbV3 left, float right)
+dtb_function dtbV3 dtbVec3_Subtractf(dtbV3 left, float right)
 {
 	dtbV3 result = {0};
 	result.x = left.x - right;
@@ -302,7 +303,7 @@ dtbV3 dtbVec3_Subtractf(dtbV3 left, float right)
 	return result;
 }
 
-dtbV3 dtbVec3_Multiply(dtbV3 left, dtbV3 right)
+dtb_function dtbV3 dtbVec3_Multiply(dtbV3 left, dtbV3 right)
 {
 	dtbV3 result = {0};
 	result.x = left.x * right.x;
@@ -311,7 +312,7 @@ dtbV3 dtbVec3_Multiply(dtbV3 left, dtbV3 right)
 	return result;
 }
 
-dtbV3 dtbVec3_Multiplyf(dtbV3 left, float right)
+dtb_function dtbV3 dtbVec3_Multiplyf(dtbV3 left, float right)
 {
 	dtbV3 result = {0};
 	result.x = left.x * right;
@@ -320,7 +321,7 @@ dtbV3 dtbVec3_Multiplyf(dtbV3 left, float right)
 	return result;
 }
 
-dtbV3 dtbVec3_Divide(dtbV3 left, dtbV3 right)
+dtb_function dtbV3 dtbVec3_Divide(dtbV3 left, dtbV3 right)
 {
 	dtbV3 result = {0};
 	result.x = left.x / right.x;
@@ -329,7 +330,7 @@ dtbV3 dtbVec3_Divide(dtbV3 left, dtbV3 right)
 	return result;
 }
 
-dtbV3 dtbVec3_Dividef(dtbV3 left, float right)
+dtb_function dtbV3 dtbVec3_Dividef(dtbV3 left, float right)
 {
 	dtbV3 result = {0};
 	result.x = left.x / right;
@@ -339,7 +340,7 @@ dtbV3 dtbVec3_Dividef(dtbV3 left, float right)
 }
 
 // NOTE(DILLON): Vector 4's
-dtbV4 dtbVec4(float x, float y, float z, float w)
+dtb_function dtbV4 dtbVec4(float x, float y, float z, float w)
 {
 	dtbV4 result = {0};
 	result.x = x;
@@ -349,13 +350,13 @@ dtbV4 dtbVec4(float x, float y, float z, float w)
 	return result;
 }
 
-dtbV4 dtbVec4z()
+dtb_function dtbV4 dtbVec4z()
 {
 	dtbV4 result = {0};
 	return result;
 }
 
-DTB_MATH_B32 dtbVec4_Equals(dtbV4 left, dtbV4 right)
+dtb_function DTB_MATH_B32 dtbVec4_Equals(dtbV4 left, dtbV4 right)
 {
     for(int i = 0; i < 4; i++)
     {
@@ -368,7 +369,7 @@ DTB_MATH_B32 dtbVec4_Equals(dtbV4 left, dtbV4 right)
     return DTB_MATH_TRUE;
 }
 
-dtbV4 dtbVec4_Add(dtbV4 left, dtbV4 right)
+dtb_function dtbV4 dtbVec4_Add(dtbV4 left, dtbV4 right)
 {
 	dtbV4 result = {0};
 	result.x = left.x + right.x;
@@ -378,7 +379,7 @@ dtbV4 dtbVec4_Add(dtbV4 left, dtbV4 right)
 	return result;
 }
 
-dtbV4 dtbVec4_Addf(dtbV4 left, float right)
+dtb_function dtbV4 dtbVec4_Addf(dtbV4 left, float right)
 {
 	dtbV4 result = {0};
 	result.x = left.x + right;
@@ -388,7 +389,7 @@ dtbV4 dtbVec4_Addf(dtbV4 left, float right)
 	return result;
 }
 
-dtbV4 dtbVec4_Subtract(dtbV4 left, dtbV4 right)
+dtb_function dtbV4 dtbVec4_Subtract(dtbV4 left, dtbV4 right)
 {
 	dtbV4 result = {0};
 	result.x = left.x - right.x;
@@ -398,7 +399,7 @@ dtbV4 dtbVec4_Subtract(dtbV4 left, dtbV4 right)
 	return result;
 }
 
-dtbV4 dtbVec4_Subtractf(dtbV4 left, float right)
+dtb_function dtbV4 dtbVec4_Subtractf(dtbV4 left, float right)
 {
 	dtbV4 result = {0};
 	result.x = left.x - right;
@@ -408,7 +409,7 @@ dtbV4 dtbVec4_Subtractf(dtbV4 left, float right)
 	return result;
 }
 
-dtbV4 dtbVec4_Multiply(dtbV4 left, dtbV4 right)
+dtb_function dtbV4 dtbVec4_Multiply(dtbV4 left, dtbV4 right)
 {
 	dtbV4 result = {0};
 	result.x = left.x * right.x;
@@ -418,7 +419,7 @@ dtbV4 dtbVec4_Multiply(dtbV4 left, dtbV4 right)
 	return result;
 }
 
-dtbV4 dtbVec4_Multiplyf(dtbV4 left, float right)
+dtb_function dtbV4 dtbVec4_Multiplyf(dtbV4 left, float right)
 {
 	dtbV4 result = {0};
 	result.x = left.x * right;
@@ -428,7 +429,7 @@ dtbV4 dtbVec4_Multiplyf(dtbV4 left, float right)
 	return result;
 }
 
-dtbV4 dtbVec4_Divide(dtbV4 left, dtbV4 right)
+dtb_function dtbV4 dtbVec4_Divide(dtbV4 left, dtbV4 right)
 {
 	dtbV4 result = {0};
 	result.x = left.x / right.x;
@@ -438,7 +439,7 @@ dtbV4 dtbVec4_Divide(dtbV4 left, dtbV4 right)
 	return result;
 }
 
-dtbV4 dtbVec4_Dividef(dtbV4 left, float right)
+dtb_function dtbV4 dtbVec4_Dividef(dtbV4 left, float right)
 {
 	dtbV4 result = {0};
 	result.x = left.x / right;
@@ -450,12 +451,12 @@ dtbV4 dtbVec4_Dividef(dtbV4 left, float right)
 
 // NOTE(DILLON): Matrix4x4
 
-dtbM4 dtbMat4(){
+dtb_function dtbM4 dtbMat4(){
 	dtbM4 result = {0};
 	return result;
 }
 
-dtbM4 dtbMat4d(float diagonal){
+dtb_function dtbM4 dtbMat4d(float diagonal){
 	dtbM4 result = dtbMat4();
 	
 	result.elements[0][0] = diagonal;
@@ -465,7 +466,7 @@ dtbM4 dtbMat4d(float diagonal){
 	return result;
 }
 
-dtbM4 dtbMat4_Add(dtbM4 left, dtbM4 right){
+dtb_function dtbM4 dtbMat4_Add(dtbM4 left, dtbM4 right){
 	dtbM4 result;
 	
 	for(int columns = 0; columns < 4; columns++){
@@ -478,7 +479,7 @@ dtbM4 dtbMat4_Add(dtbM4 left, dtbM4 right){
 }
 
 
-dtbM4 dtbMat4_Subtract(dtbM4 left, dtbM4 right){
+dtb_function dtbM4 dtbMat4_Subtract(dtbM4 left, dtbM4 right){
 	dtbM4 result;
 	
 	for(int columns = 0; columns < 4; columns++){
@@ -490,7 +491,7 @@ dtbM4 dtbMat4_Subtract(dtbM4 left, dtbM4 right){
 	return result;
 }
 
-dtbM4 dtbMat4_Multiply(dtbM4 left, dtbM4 right){
+dtb_function dtbM4 dtbMat4_Multiply(dtbM4 left, dtbM4 right){
 	dtbM4 result;
 	
 	for(int columns = 0; columns < 4; columns++){
@@ -507,7 +508,7 @@ dtbM4 dtbMat4_Multiply(dtbM4 left, dtbM4 right){
 	return result;
 }
 
-dtbM4 dtbMat4_Dividef(dtbM4 matrix, float scalar){
+dtb_function dtbM4 dtbMat4_Dividef(dtbM4 matrix, float scalar){
 	dtbM4 result;
 	
 	for(int columns = 0; columns < 4; columns++){
@@ -522,267 +523,267 @@ dtbM4 dtbMat4_Dividef(dtbM4 matrix, float scalar){
 
 #ifdef __cplusplus
 
-dtbV2 operator+(dtbV2 left, dtbV2 right){
+dtb_function dtbV2 operator+(dtbV2 left, dtbV2 right){
 	return dtbVec2_Add(left, right);
 }
 
-dtbV2 operator+=(dtbV2 left, dtbV2 right){
+dtb_function dtbV2 operator+=(dtbV2 left, dtbV2 right){
     return left = left + right;
 }
 
-dtbV2 operator-(dtbV2 left, dtbV2 right){
+dtb_function dtbV2 operator-(dtbV2 left, dtbV2 right){
 	return dtbVec2_Subtract(left, right);
 }
 
-dtbV2 operator-=(dtbV2 left, dtbV2 right){
+dtb_function dtbV2 operator-=(dtbV2 left, dtbV2 right){
     return left = left - right;
 }
 
-dtbV2 operator*(dtbV2 left, dtbV2 right){
+dtb_function dtbV2 operator*(dtbV2 left, dtbV2 right){
 	return dtbVec2_Multiply(left, right);
 }
 
-dtbV2 operator*=(dtbV2 left, dtbV2 right){
+dtb_function dtbV2 operator*=(dtbV2 left, dtbV2 right){
     return left = left * right;
 }
 
-dtbV2 operator/(dtbV2 left, dtbV2 right){
+dtb_function dtbV2 operator/(dtbV2 left, dtbV2 right){
 	return dtbVec2_Divide(left, right);
 }
 
-dtbV2 operator/=(dtbV2 left, dtbV2 right){
+dtb_function dtbV2 operator/=(dtbV2 left, dtbV2 right){
     return left = left / right;
 }
 
-dtbV2 operator+(dtbV2 left, float right)
+dtb_function dtbV2 operator+(dtbV2 left, float right)
 {
 	return dtbVec2_Addf(left, right);
 }
 
-dtbV2 operator+=(dtbV2 left, float right)
+dtb_function dtbV2 operator+=(dtbV2 left, float right)
 {
 	return left = left + right;
 }
 
-dtbV2 operator-(dtbV2 left, float right)
+dtb_function dtbV2 operator-(dtbV2 left, float right)
 {
 	return dtbVec2_Subtractf(left, right);
 }
 
-dtbV2 operator-=(dtbV2 left, float right)
+dtb_function dtbV2 operator-=(dtbV2 left, float right)
 {
 	return left = left - right;
 }
 
-dtbV2 operator*(dtbV2 left, float right)
+dtb_function dtbV2 operator*(dtbV2 left, float right)
 {
 	return dtbVec2_Multiplyf(left, right);
 }
 
-dtbV2 operator*=(dtbV2 left, float right)
+dtb_function dtbV2 operator*=(dtbV2 left, float right)
 {
 	return left = left * right;
 }
 
-dtbV2 operator/(dtbV2 left, float right)
+dtb_function dtbV2 operator/(dtbV2 left, float right)
 {
 	return dtbVec2_Dividef(left, right);
 }
 
-dtbV2 operator/=(dtbV2 left, float right){
+dtb_function dtbV2 operator/=(dtbV2 left, float right){
 	return left = left / right;
 }
 
-DTB_MATH_B32 operator==(dtbV2 left, dtbV2 right)
+dtb_function DTB_MATH_B32 operator==(dtbV2 left, dtbV2 right)
 {
     return dtbVec2_Equals(left, right);
 }
 
-dtbV3 operator+(dtbV3 left, dtbV3 right){
+dtb_function dtbV3 operator+(dtbV3 left, dtbV3 right){
 	return dtbVec3_Add(left, right);
 }
 
-dtbV3 operator+=(dtbV3 left, dtbV3 right){
+dtb_function dtbV3 operator+=(dtbV3 left, dtbV3 right){
     return left = left + right;
 }
 
-dtbV3 operator-(dtbV3 left, dtbV3 right){
+dtb_function dtbV3 operator-(dtbV3 left, dtbV3 right){
 	return dtbVec3_Subtract(left, right);
 }
 
-dtbV3 operator-=(dtbV3 left, dtbV3 right){
+dtb_function dtbV3 operator-=(dtbV3 left, dtbV3 right){
     return left = left - right;
 }
 
-dtbV3 operator*(dtbV3 left, dtbV3 right){
+dtb_function dtbV3 operator*(dtbV3 left, dtbV3 right){
 	return dtbVec3_Multiply(left, right);
 }
 
-dtbV3 operator*=(dtbV3 left, dtbV3 right){
+dtb_function dtbV3 operator*=(dtbV3 left, dtbV3 right){
     return left = left * right;
 }
 
-dtbV3 operator/(dtbV3 left, dtbV3 right){
+dtb_function dtbV3 operator/(dtbV3 left, dtbV3 right){
 	return dtbVec3_Divide(left, right);
 }
 
-dtbV3 operator/=(dtbV3 left, dtbV3 right){
+dtb_function dtbV3 operator/=(dtbV3 left, dtbV3 right){
     return left = left / right;
 }
 
-dtbV3 operator+(dtbV3 left, float right)
+dtb_function dtbV3 operator+(dtbV3 left, float right)
 {
 	return dtbVec3_Addf(left, right);
 }
 
-dtbV3 operator+=(dtbV3 left, float right)
+dtb_function dtbV3 operator+=(dtbV3 left, float right)
 {
 	return left = left + right;
 }
 
-dtbV3 operator-(dtbV3 left, float right)
+dtb_function dtbV3 operator-(dtbV3 left, float right)
 {
 	return dtbVec3_Subtractf(left, right);
 }
 
-dtbV3 operator-=(dtbV3 left, float right)
+dtb_function dtbV3 operator-=(dtbV3 left, float right)
 {
 	return left = left - right;
 }
 
-dtbV3 operator*(dtbV3 left, float right)
+dtb_function dtbV3 operator*(dtbV3 left, float right)
 {
 	return dtbVec3_Multiplyf(left, right);
 }
 
-dtbV3 operator*=(dtbV3 left, float right)
+dtb_function dtbV3 operator*=(dtbV3 left, float right)
 {
 	return left = left * right;
 }
 
-dtbV3 operator/(dtbV3 left, float right)
+dtb_function dtbV3 operator/(dtbV3 left, float right)
 {
 	return dtbVec3_Dividef(left, right);
 }
 
-dtbV3 operator/=(dtbV3 left, float right)
+dtb_function dtbV3 operator/=(dtbV3 left, float right)
 {
 	return left = left / right;
 }
 
-DTB_MATH_B32 operator==(dtbV3 left, dtbV3 right)
+dtb_function DTB_MATH_B32 operator==(dtbV3 left, dtbV3 right)
 {
     return dtbVec3_Equals(left, right);
 }
 
-dtbV4 operator+(dtbV4 left, dtbV4 right){
+dtb_function dtbV4 operator+(dtbV4 left, dtbV4 right){
 	return dtbVec4_Add(left, right);
 }
 
-dtbV4 operator+=(dtbV4 left, dtbV4 right){
+dtb_function dtbV4 operator+=(dtbV4 left, dtbV4 right){
 	return left = left + right;
 }
 
-dtbV4 operator-(dtbV4 left, dtbV4 right){
+dtb_function dtbV4 operator-(dtbV4 left, dtbV4 right){
 	return dtbVec4_Subtract(left, right);
 }
 
-dtbV4 operator-=(dtbV4 left, dtbV4 right){
+dtb_function dtbV4 operator-=(dtbV4 left, dtbV4 right){
 	return left = left - right;
 }
 
-dtbV4 operator*(dtbV4 left, dtbV4 right){
+dtb_function dtbV4 operator*(dtbV4 left, dtbV4 right){
 	return dtbVec4_Multiply(left, right);
 }
 
-dtbV4 operator*=(dtbV4 left, dtbV4 right){
+dtb_function dtbV4 operator*=(dtbV4 left, dtbV4 right){
 	return left = left * right;
 }
 
-dtbV4 operator/(dtbV4 left, dtbV4 right){
+dtb_function dtbV4 operator/(dtbV4 left, dtbV4 right){
 	return dtbVec4_Divide(left, right);
 }
 
-dtbV4 operator/=(dtbV4 left, dtbV4 right){
+dtb_function dtbV4 operator/=(dtbV4 left, dtbV4 right){
 	return left = left / right;
 }
 
-dtbV4 operator+(dtbV4 left, float right)
+dtb_function dtbV4 operator+(dtbV4 left, float right)
 {
 	return dtbVec4_Addf(left, right);
 }
 
-dtbV4 operator+=(dtbV4 left, float right)
+dtb_function dtbV4 operator+=(dtbV4 left, float right)
 {
 	return left = left + right;
 }
 
-dtbV4 operator-(dtbV4 left, float right)
+dtb_function dtbV4 operator-(dtbV4 left, float right)
 {
 	return dtbVec4_Subtractf(left, right);
 }
 
-dtbV4 operator-=(dtbV4 left, float right)
+dtb_function dtbV4 operator-=(dtbV4 left, float right)
 {
 	return left = left - right;
 }
 
-dtbV4 operator*(dtbV4 left, float right)
+dtb_function dtbV4 operator*(dtbV4 left, float right)
 {
 	return dtbVec4_Multiplyf(left, right);
 }
 
-dtbV4 operator*=(dtbV4 left, float right)
+dtb_function dtbV4 operator*=(dtbV4 left, float right)
 {
 	return left = left * right;
 }
 
-dtbV4 operator/(dtbV4 left, float right)
+dtb_function dtbV4 operator/(dtbV4 left, float right)
 {
 	return dtbVec4_Dividef(left, right);
 }
 
-dtbV4 operator/=(dtbV4 left, float right)
+dtb_function dtbV4 operator/=(dtbV4 left, float right)
 {
 	return left = left / right;
 }
 
-DTB_MATH_B32 operator==(dtbV4 left, dtbV4 right)
+dtb_function DTB_MATH_B32 operator==(dtbV4 left, dtbV4 right)
 {
     return dtbVec4_Equals(left, right);
 }
 
-dtbM4 operator+(dtbM4 left, dtbM4 right){
+dtb_function dtbM4 operator+(dtbM4 left, dtbM4 right){
 	return dtbMat4_Add(left, right);
 }
 
-dtbM4 operator+=(dtbM4 left, dtbM4 right){
+dtb_function dtbM4 operator+=(dtbM4 left, dtbM4 right){
     return left = left + right;
 }
 
-dtbM4 operator-(dtbM4 left, dtbM4 right){
+dtb_function dtbM4 operator-(dtbM4 left, dtbM4 right){
 	return dtbMat4_Subtract(left, right);
 }
 
-dtbM4 operator-=(dtbM4 left, dtbM4 right){
+dtb_function dtbM4 operator-=(dtbM4 left, dtbM4 right){
     return left = left - right;
 }
 
-dtbM4 operator*(dtbM4 left, dtbM4 right){
+dtb_function dtbM4 operator*(dtbM4 left, dtbM4 right){
 	return dtbMat4_Multiply(left, right);
 }
 
-dtbM4 operator*=(dtbM4 left, dtbM4 right){
+dtb_function dtbM4 operator*=(dtbM4 left, dtbM4 right){
     return left = left * right;
 }
 
-dtbM4 operator/(dtbM4 left, float scalar){
+dtb_function dtbM4 operator/(dtbM4 left, float scalar){
 	return dtbMat4_Dividef(left, scalar);
 }
 
 #endif
 
-dtbV3 dtbVec3_Normalize(dtbV3 vec)
+dtb_function dtbV3 dtbVec3_Normalize(dtbV3 vec)
 {
 	dtbV3 Result = { 0 };
 	
@@ -795,7 +796,7 @@ dtbV3 dtbVec3_Normalize(dtbV3 vec)
 	return Result;
 }
 
-dtbV3 dtbVec3_Cross(dtbV3 left, dtbV3 right)
+dtb_function dtbV3 dtbVec3_Cross(dtbV3 left, dtbV3 right)
 {
 	dtbV3 Result;
 	
@@ -806,14 +807,14 @@ dtbV3 dtbVec3_Cross(dtbV3 left, dtbV3 right)
 	return (Result);
 }
 
-float dtbVec3_Dot(dtbV3 left, dtbV3 right)
+dtb_function float dtbVec3_Dot(dtbV3 left, dtbV3 right)
 {
 	float Result = (left.x * right.x) + (left.y * right.y) + (left.z * right.z);
 	
 	return (Result);
 }
 
-dtbM4 dtbTranslate(dtbV3 translation){
+dtb_function dtbM4 dtbTranslate(dtbV3 translation){
 	dtbM4 result = dtbMat4d(1.0f);
 	
 	result.elements[3][0] = translation.x;
@@ -823,7 +824,7 @@ dtbM4 dtbTranslate(dtbV3 translation){
 	return result;
 }
 
-dtbM4 dtbScale(dtbV3 scale){
+dtb_function dtbM4 dtbScale(dtbV3 scale){
     dtbM4 result = dtbMat4d(1.0f);
     
     result.elements[0][0] = scale.x;
@@ -833,7 +834,7 @@ dtbM4 dtbScale(dtbV3 scale){
     return result;
 }
 
-dtbM4 dtbRotate(float angle, dtbV3 axis){
+dtb_function dtbM4 dtbRotate(float angle, dtbV3 axis){
 	dtbM4 result = dtbMat4d(1.0f);
 	
 	axis = dtbVec3_Normalize(axis);
@@ -857,7 +858,7 @@ dtbM4 dtbRotate(float angle, dtbV3 axis){
 	return result;
 }
 
-dtbM4 dtbFrustum(float right, float left, float top, float bottom, float mFar, float mNear)
+dtb_function dtbM4 dtbFrustum(float right, float left, float top, float bottom, float mFar, float mNear)
 {
 	dtbM4 Result = {0};
 	
@@ -872,7 +873,7 @@ dtbM4 dtbFrustum(float right, float left, float top, float bottom, float mFar, f
 	return Result;
 }
 
-dtbM4 dtbOrthographic(float left, float right, float bottom, float top, float mNear, float mFar)
+dtb_function dtbM4 dtbOrthographic(float left, float right, float bottom, float top, float mNear, float mFar)
 {
 	dtbM4 Result = {0};
 	
@@ -887,7 +888,7 @@ dtbM4 dtbOrthographic(float left, float right, float bottom, float top, float mN
 	return Result;
 }
 
-dtbM4 dtbProjection(float right, float left, float top, float bottom, float mFar, float mNear)
+dtb_function dtbM4 dtbProjection(float right, float left, float top, float bottom, float mFar, float mNear)
 {
 	dtbM4 Result = {0};
 	
@@ -902,7 +903,7 @@ dtbM4 dtbProjection(float right, float left, float top, float bottom, float mFar
 	return Result;
 }
 
-dtbM4 dtbPerspective(float FOV, float AspectRatio, float Near, float Far)
+dtb_function dtbM4 dtbPerspective(float FOV, float AspectRatio, float Near, float Far)
 {
 	dtbM4 Result = dtbMat4();
 	
@@ -918,7 +919,7 @@ dtbM4 dtbPerspective(float FOV, float AspectRatio, float Near, float Far)
     return (Result);
 }
 
-dtbM4 dtbLookAt(dtbV3 Eye, dtbV3 Center, dtbV3 Up)
+dtb_function dtbM4 dtbLookAt(dtbV3 Eye, dtbV3 Center, dtbV3 Up)
 {
 	dtbM4 Result;
 	
@@ -949,7 +950,7 @@ dtbM4 dtbLookAt(dtbV3 Eye, dtbV3 Center, dtbV3 Up)
 	return (Result);
 }
 
-dtbV2 dtbCross2f(dtbV2 vec)
+dtb_function dtbV2 dtbCross2f(dtbV2 vec)
 {
 	dtbV2 result = {0};
 	result.x = vec.y;
@@ -957,32 +958,32 @@ dtbV2 dtbCross2f(dtbV2 vec)
 	return result;
 }
 
-float dtbDistancef(float x1, float y1, float x2, float y2)
+dtb_function float dtbDistancef(float x1, float y1, float x2, float y2)
 {
 	return sqrtf(powf(x2 - x1, 2) + powf(y2 - y1, 2));
 }
 
-float dtbDistancev(dtbV2 left, dtbV2 right)
+dtb_function float dtbDistancev(dtbV2 left, dtbV2 right)
 {
 	return sqrtf(powf(right.x - left.x, 2) + powf(right.y - left.y, 2));
 }
 
-float dtbVec2_Length(dtbV2 vec)
+dtb_function float dtbVec2_Length(dtbV2 vec)
 {
 	return sqrtf(vec.x * vec.x + vec.y * vec.y);
 }
 
-float dtbVec3_Length(dtbV3 vec)
+dtb_function float dtbVec3_Length(dtbV3 vec)
 {
 	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 }
 
-float dtbVec4_Length(dtbV4 vec)
+dtb_function float dtbVec4_Length(dtbV4 vec)
 {
 	return sqrtf(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w);
 }
 
-void dtbV2_SetAngle(dtbV2 vec, float angle)
+dtb_function void dtbV2_SetAngle(dtbV2 vec, float angle)
 {
 	float length = dtbVec2_Length(vec);
 	
@@ -991,12 +992,12 @@ void dtbV2_SetAngle(dtbV2 vec, float angle)
 }
 
 
-int IsCircleColliding(dtbCircle c1, dtbCircle c2)
+dtb_function int IsCircleColliding(dtbCircle c1, dtbCircle c2)
 {
 	return dtbDistancef(c1.x, c1.y, c2.x, c2.y) <= c1.radius + c2.radius;
 }
 
-int dtbIsCirclePointColliding(float x, float y, dtbCircle c)
+dtb_function int dtbIsCirclePointColliding(float x, float y, dtbCircle c)
 {
 	return dtbDistancef(x, y, c.x, c.y) < c.radius;
 }
